@@ -12,16 +12,52 @@
             console.log(response)
         })
     }
+    /**
+     * This function is used to remove the email from the array and display when the user clicks the delete
+     * @param emailsList
+     * @param id
+     */
+    let remove_email= (emailsList, id)=> {
+        emailsList.splice(id, 1)
+        console.log(emailsList)
+    }
 
     /**
-     * add_email function is for displaying the user emails in the display field
+     * add_email function is for displaying the user emails in the display field and for adding the user to the contact array
      */
     let add_email = () =>{
+        //retreiving the email from the input field
         let emailInputField = document.getElementById("inputEmail");
+        let email_to_display = ""
+        contacts.push(emailInputField.value);
+        
         let displayField = document.getElementById("display");
-        displayField.innerHTML = emailInputField.value;
+        if (contacts.length>0){
+
+            let htmlDisplay = ``;
+
+            htmlDisplay += `<div style='display: flex; flex-direction: column; align-items: center;'>`;
+            for (let contact_index = 0; contact_index<contacts.length; contact_index++){
+                htmlDisplay += `<div class='row' style="margin:10px;width:250px; height:25px; border:2px solid lightgrey; border-radius:60px; display: flex; justify-content: space-between;">`;
+                email_to_display = contacts[contact_index]
+                htmlDisplay += `<div class='contact'>` + email_to_display + `</div>`;
+                htmlDisplay += `<button on:click={remove_email(contacts, '${contact_index}')} style = "border-radius:100px; cursor:pointer;"><i class = "material-icons" style = "font-size:15px;">remove</i></button>`
+                htmlDisplay +=`</div>`;
+            }
+            htmlDisplay += `</div>`;
+            displayField.innerHTML = htmlDisplay;
+        }
+        else{
+            displayField.innerHTML = `No users added.`;
+            
+        }
+        console.log(contacts)
+
     }
+
+    
 </script>
+
 
 <!-- This link is currently used for using google material icons-->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -32,6 +68,7 @@
     .heading{
         text-align: center;
     }
+
 </style>
 
 <br>
@@ -44,16 +81,7 @@
 <button on:click={add_email}>Add +</button><br><br><br><br><br>
 
 
-<div id="display" style="width:250px; height:25px; margin:auto; border:2px solid lightgrey; border-radius:60px; align-items:right" >
-    <!--The added users will be displayed in this field-->
-    <span style="position:fixed">
-        <!--The remove user button is created inside the display field-->
-    <button style = "height:23px; border-radius:100px; border-color:antiquewhite; background-color: lightgray;cursor:pointer; color:gray; padding:0%; ">
-        <i class = "material-icons" style="font-size: 20px;">
-            remove
-        </i>
-    </button>
-    </span>
+<div id="display" >
 
 </div>
 </div>
