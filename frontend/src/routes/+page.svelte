@@ -3,7 +3,11 @@
 
 <script>
 	let email = '';
+
+    function handleInput(event) {
+    userEmail = event.target.value;
+  }
 </script>
 
-<input bind:value={email} placeholder="enter your email address" />
-<p>Hello {name || 'stranger'}!</p>
+<input type="email" placeholder="Enter your email" bind:value={email} on:input={handleInput} />
+<p>Your email is: {email}</p>
