@@ -31,6 +31,7 @@
      */
     let add_email = () =>{
         if(!emailField.trim()){
+            //This is to display error message when inputfield is empty
             errorMessage = 'Please enter email address.';
             // Clear error message after 2 seconds
             setTimeout(() => {
@@ -38,6 +39,7 @@
             }, 2000);
         }
         else{
+            //if input field is not empty then it will be pushed to the contacts list
             contacts.push(emailField)
             emailField = ""
             contacts = contacts
@@ -53,7 +55,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 
-      <!-- this style heading class is for making the "Add Recepients" heading centered in the page-->
+      <!-- this styling secton contains styles for many components used throughout the page-->
 <style>
     .heading{
         text-align: center;
@@ -67,7 +69,7 @@
         display: flex;
         justify-content: center;
     }
-
+    
     .error {
         color: red;
         position: fixed;
@@ -79,10 +81,11 @@
 </style>
 
 <br>
-
+<!--If an error message is triggered the error message is displayed-->
 {#if errorMessage}
 <p class="error">{errorMessage}</p>
 {/if}
+
 
 <div class="heading">Add Receipents<br><br><br><br><br><br>
 <!-- Below is HTML code for the input field and add button-->
