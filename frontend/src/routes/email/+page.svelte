@@ -53,8 +53,7 @@
     
 </script>
 
-<input bind:value = {name} placeholder = "enter your email address" />
-<p>Hello {name || 'welcome to KeepMePosted'}!</p>
+
 
 
 
@@ -110,11 +109,21 @@
     {/each}
 </ul>
 
-<button type="button" on:click={buttonPressed}> Send </button>
-
-<div id="display" >
-
-
+<div id="display">
+    <label>
+        What do you want to send?
+        <br>
+        <textarea bind:value = {name} cols="80" rows="20" name="content"></textarea>
+    </label>
+    
 
 </div>
+<div id ="displayTwo">
+    <labe>Email information that will be sent</labe>
+    <p> {name || 'welcome to KeepMePosted!'}</p>
+</div>
+
+<button type="button" on:click={buttonPressed}> Send </button>
+
+
 </div>
