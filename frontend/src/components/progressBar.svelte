@@ -51,7 +51,7 @@
 
 <div>
   <div id="myProgress"/>
-  <div id="myBar" style="width: {progressBarWidth}%">{progressBarWidth}%</div>
+  <div id="myBar" style="width: {progressBarWidth}%"><b>{progressBarWidth}</b>%</div>
   <button id="progressButton" on:click = {() => (makeProgression())} >Hello</button>
 </div>
 
