@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "flowbite": "^2.3.0",
+    "flowbite-svelte": "^0.46.1"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.11.2",
+    "chakra-ui-svelte": "^0.2.7"
+  }
+}

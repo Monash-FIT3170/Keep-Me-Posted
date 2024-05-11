@@ -11,8 +11,16 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"autoprefixer": "^10.4.16",
+		"flowbite": "^2.3.0",
+		"flowbite-svelte": "^0.46.1",
+		"postcss": "^8.4.33",
 		"svelte": "^4.2.7",
+		"tailwindcss": "^3.4.1",
 		"vite": "^5.0.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"svelte-file-dropzone": "^2.0.7"
+	}
 }

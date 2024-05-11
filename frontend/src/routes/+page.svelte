@@ -10,6 +10,8 @@
 
 <script>
     import TopBar from '../components/topbar.svelte';
+    import ProgressBar from '../components/progressBar.svelte';
 </script>
 
 <TopBar/>
+<ProgressBar/>
