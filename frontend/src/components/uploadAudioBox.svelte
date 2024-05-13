@@ -44,7 +44,7 @@
       }
 
       const audio = new Audio(URL.createObjectURL(selectedFile));  // Create new Audio HTML object, create URL used as source for audio element
-      // makeProgression()  // Trigger the loading bar
+      makeProgression()  // Trigger the loading bar
       updateUploadBoxContents("Generating summary")  // Change box to show 'Uploading Meeting Audio'
       audio.addEventListener('loadedmetadata', () => {
         if (audio.duration <= MAX_DURATION_SECONDS) {
@@ -66,22 +66,26 @@
   let progressBarProgress
   let progressBarDisplay = 0
   let loadingBarWidth;
+  let progressBarMax = 1;
 
-  $: if (progressBarWidth === loadingBarWidth) {
-    clearInterval(progressBarProgress)
+  $: switch(progressBarWidth) {
+    case (Math.round(loadingBarWidth*progressBarMax)):
+      clearInterval(progressBarProgress);
   }
 
   const progression = () => {
+    console.log(5);
     progressBarWidth += 1
     progressBarDisplay = Math.round(progressBarWidth/loadingBarWidth * 100)
   }
 
   const makeProgression = () => {
     loadingBarWidth = document.getElementById("loadingBar").clientWidth
-    document.getElementById("progressBar").style.display = "block"
+    document.getElementById("loadingBar").style.visibility = "visible"
+    document.getElementById("progressNumber").style.visibility = "visible"
+    progressBarProgress = setInterval(progression, 10)
     progressBarWidth = 0
     progressBarDisplay = 0
-    progressBarProgress = setInterval(progression, 1)
   }
 
   // ------------------------------------------ Box Contents
@@ -123,14 +127,14 @@
 <div class="upload-box">
   <label for="uploadAudioBox" class="custom-input">
     <Dropzone on:drop={handleFilesSelect} accept=".mp3, .wav"> <!-- The dropzone is on top of custom-input so the grey is covering the lightblue-->
-      <!-- <div id="loadingBar">
-        <div id="progressBar" style="width: {progressBarWidth}px"></div>
-        <div id="progressNumber"><b>{progressBarDisplay}</b>%</div>
-      </div> -->
-
       <img class="large-icon" src={micIcon} alt="Icon" />
       <span class="first-line">Upload meeting audio</span>
       <span class="second-line">Must be under 120 minutes. MP3 or WAV formats accepted.</span>
+
+      <div id="loadingBar">
+        <div id="progressBar" style="width: {progressBarWidth}px"></div>
+      </div> 
+      <div id="progressNumber"><b>{progressBarDisplay}</b>%</div>
     </Dropzone>    
   </label>
 </div>
@@ -283,32 +287,30 @@
 }
 
 #loadingBar {
+  visibility: hidden;
   border: 1px solid;
-  width: 40%;
-  height: 40px;
-  top: 51%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   position: absolute;
-  background-color: #F8F9FC;
+  margin-top: 67px;
+  width: 45%;
+  height: 10px;
+  background-color: #e9eaec;
   border-radius: 30px 30px 30px 30px;
 }
 
 #progressBar {
-  height: 40px;
-  top: 50%;
-  left: 50%;
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  background-color:  #1849A9;
+  position: relative; 
+  height: 10px;
+  background-color:  #1570EF;
   border-radius: 30px 30px 30px 30px;
 }
 
 #progressNumber {
-  position: absolute;
-  top: 25%;
-  left: 101%;
+  color: rgb(105, 104, 104);
+  visibility: hidden;
+  font-size: 14px;
+  left: 47.75%;
+  top: 11%;
+  position: relative; 
 }
 
 </style>
