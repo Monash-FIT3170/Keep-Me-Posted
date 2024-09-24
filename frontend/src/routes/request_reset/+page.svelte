@@ -1,5 +1,5 @@
 <script>
-    import reset_password from '../../api-functions/reset_password';
+    import { reset_password } from '../../api-functions/reset_password';
     import { backendURL } from "../../api-functions/base-URL";
 
 
