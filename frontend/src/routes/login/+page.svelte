@@ -207,10 +207,13 @@
                         validationActive={passwordValidationActive}
                      />
                   </div>
+                  
                   <div
                      class="w-full mb-5 flex justify-end text-xs text-gray-500 font-bold hover:text-purple-500 cursor-pointer"
                   >
+                  <button on:click={() => goto("/request_reset")}>
                      Forgot Password
+                     </button> 
                   </div>
 
                   <div id="login-button" class="w-full h-[45px] mb-4">
