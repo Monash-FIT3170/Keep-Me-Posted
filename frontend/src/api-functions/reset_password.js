@@ -1,6 +1,6 @@
 
 export let reset_password = async (email, baseURL) => {
-    const postRequestString = baseURL + "/api/password_reset" 
+    const postRequestString = baseURL + "/password_reset" 
 
     const response = await fetch(postRequestString, {
         method: "POST",
