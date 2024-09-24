@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-# views.py
 from django.contrib.auth.views import PasswordResetView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -35,6 +34,7 @@ class CustomPasswordResetView(PasswordResetView):
             request=self.request
         )
         return super().form_valid(form)
+
 
 @api_view(['POST'])
 def login(request):
