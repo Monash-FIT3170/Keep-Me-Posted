@@ -11,8 +11,8 @@
   import PopUpModal from '../components/popUpModal.svelte';
 
   let showDropdown = false;
+  let isHovered = false;
   let profileIcons = [profileIcon, profileHoverIcon];
-  let currentIconIndex = 0;
   let popUpModalComponent;  
 
   let email = ""; // Initialize email as an empty string
@@ -24,13 +24,19 @@
 
   // Ensure to unsubscribe when the component is destroyed
   onDestroy(() => {
-    unsubscribe();
+    unsubscribe(); 
   });
 
-  // Function to toggle dropdown
-  function toggleDropdown() {
-    showDropdown = !showDropdown;
-    currentIconIndex = (currentIconIndex + 1) % profileIcons.length;
+  // Hover handling
+  function hover() {
+    isHovered = true;
+    showDropdown = true; // Open dropdown on hover
+  }
+
+  // When non-hovering
+  function antiHover() {
+    isHovered = false;
+    showDropdown = false; // Close dropdown on hover end
   }
 
   // Function to handle logging out
@@ -82,9 +88,14 @@
     <div class="px-8 flex">
       <div>
         {#if (email)} <!-- Check if email is available -->
-          <button on:click={() => toggleDropdown()}>
+          <button 
+            on:click={() => goto("/profile")} 
+            on:mouseenter={hover} 
+            on:mouseleave={antiHover}
+            class="relative"
+          >
             <div class="flex justify-center items-center px-8">
-              <img class="h-6" src={profileIcons[currentIconIndex]} alt="Profile Icon" />
+              <img class="h-6" src={isHovered ? profileHoverIcon : profileIcon} alt="Profile Icon" />
             </div>
           </button>
 
@@ -106,8 +117,8 @@
               </div>
             </div>
           {/if}
-        {:else}
-          <Button type="secondary" text="Sign In" handleClick={handleSignIn}/>
+        {:else} 
+         <Button type="secondary" text="Sign In" handleClick={handleSignIn}/>
         {/if}
       </div>
     </div>
