@@ -25,7 +25,7 @@
 
   // Ensure to unsubscribe when the component is destroyed
   onDestroy(() => {
-    unsubscribe(); 
+    unsubscribe();  
   });
 
   // Hover handling
@@ -100,7 +100,8 @@
       <div>
         {#if (email)} <!-- Check if email is available -->
           <button 
-            on:click={hover} 
+            on:click={() => goto("/profile")} 
+            on:mouseenter={hover} 
             on:mouseleave={antiHover}
             class="relative"
           >
