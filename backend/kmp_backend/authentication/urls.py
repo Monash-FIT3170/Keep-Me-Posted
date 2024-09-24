@@ -27,7 +27,7 @@ urlpatterns = [
     # Test endpoint for token authentication
     path('test_token', views.test_token, name='test_token'),
     # Endpoint for sending password reset
-    path('auth/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset', CustomPasswordResetView.as_view(), name='password_reset'),
     # Endpoint for resetting password
-    path('api/password_reset_confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password_reset_confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]
