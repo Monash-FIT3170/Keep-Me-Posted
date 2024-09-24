@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
+from .views import CustomPasswordResetView
 
 urlpatterns = [
     # Endpoint for user login
@@ -24,4 +25,6 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     # Test endpoint for token authentication
     path('test_token', views.test_token, name='test_token'),
+    # Endpoint for sending password reset
+    path('auth/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
 ]
