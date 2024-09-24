@@ -11,8 +11,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 FRONTEND_URL = "http://localhost:5173/reset-password" ### WILL NEED TO CHANGE THIS FOR DEPLOYMENT
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("SMTP_EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("SMTP_API_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
