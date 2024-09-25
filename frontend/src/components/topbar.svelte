@@ -111,10 +111,11 @@
           </button>
 
           {#if showDropdown}
-            <button 
+          <button 
+            on:click={copyUser}
             on:mouseenter={hover} 
             on:mouseleave={antiHover}
-            class="w-fit absolute bg-white shadow right-16 py-2 rounded-lg z-40"
+            class="w-fit absolute bg-white shadow right-16 py-2 rounded-lg z-50"
             style="top: 3.3rem;" Adjusted the dropdown position
           >
               <div class="text-left w-fit py-2 rounded-lg">
