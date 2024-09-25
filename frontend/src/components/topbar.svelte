@@ -36,7 +36,17 @@
   // When non-hovering
   function antiHover() {
     isHovered = false;
-    showDropdown = false; // Close dropdown on hover end
+    setTimeout(() => {
+      if (!isHovered) {
+        showDropdown = false; // Hide dropdown only when not hovered
+      }
+    }, 200); 
+
+  }
+
+  // Copies user name from dropdown
+  function copyUser() {
+    navigator.clipboard.writeText(email) // can be changed to copy username rather than email in future
   }
 
   // Function to handle logging out
@@ -100,7 +110,13 @@
           </button>
 
           {#if showDropdown}
-            <div class="w-fit absolute bg-white shadow right-16 py-2 rounded-lg z-40">
+            <button 
+            on:click={copyUser}
+            on:mouseenter={hover} 
+            on:mouseleave={antiHover}
+            class="w-fit absolute bg-white shadow right-16 py-2 rounded-lg z-40"
+            style="top: 3.3rem;" Adjusted the dropdown position
+          >
               <div class="text-left w-fit py-2 rounded-lg">
                 <div class="text-gray-500 text-base px-5 pb-2 w-full">
                   {email} <!-- Show the logged-in user's email -->
@@ -115,7 +131,7 @@
                   </button>
                 </div>
               </div>
-            </div>
+            </button>
           {/if}
         {:else} 
          <Button type="secondary" text="Sign In" handleClick={handleSignIn}/>
