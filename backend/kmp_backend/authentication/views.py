@@ -11,11 +11,12 @@ from rest_framework.permissions import IsAuthenticated
 from django.middleware.csrf import get_token
 from emailing.views import send_email
 
+@api_view(['POST'])
 def send_password_reset(request):
-    if 'email' not in request.data or request.data['email'] == "":
+    if request.POST.get("email") == "":
         return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
     
-    user = get_object_or_404(User, email=request.data['email'])
+    user = get_object_or_404(User, email=request.POST.get("email"))
     
     if user:
         emailResponse = send_email(request)
