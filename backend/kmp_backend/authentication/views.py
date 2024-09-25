@@ -8,33 +8,29 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.views import PasswordResetView
-from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
+from django.middleware.csrf import get_token
+from emailing.views import send_email
 
-class CustomPasswordResetView(PasswordResetView):
-    def form_valid(self, form):
-        """
-        Override the method to include a custom URL for the frontend in the password reset email.
-        """
-        current_site = get_current_site(self.request)
-        email_template_name = 'registration/password_reset_email.html'
+def send_password_reset(request):
+    if 'email' not in request.data or request.data['email'] == "":
+        return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    user = get_object_or_404(User, email=request.data['email'])
+    
+    if user:
+        emailResponse = send_email(request)
+        
+        if emailResponse.status_code == 200:
+            return Response({'details': "Emails sent successfully!"}, status=200)
+    
+    return Response("Email did not send", status=500)
+        
 
-        # Get the frontend URL
-        frontend_url = settings.FRONTEND_URL
-
-        # Generate the token and other details
-        form.save(
-            domain_override=current_site.domain,
-            use_https=self.request.is_secure(),
-            email_template_name=email_template_name,
-            extra_email_context={
-                'frontend_url': frontend_url
-            },
-            request=self.request
-        )
-        return super().form_valid(form)
-
+@api_view(['GET'])
+def get_csrf_token(request):
+    csrf_token = get_token(request)
+    print(csrf_token)
+    return Response({'csrfToken': csrf_token})
 
 @api_view(['POST'])
 def login(request):
