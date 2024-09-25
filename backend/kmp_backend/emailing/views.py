@@ -59,26 +59,25 @@ def send_email(request):
                 attachment.add_header('Content-Disposition', 'attachment', filename='Meeting_Transcript.pdf')
                 email.attach(attachment)
 
-    try:
-            # Create secure connection with server and send email
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-                server.login(username, password)
-                server.sendmail(
-                    username, contact, email.as_string()
-                )
-            
-            return JsonResponse({'details': "Emails sent successfully!"}, status=200)
-
-    except smtplib.SMTPHeloError as e:
-        return JsonResponse({'error': f"HELO error occurred: {str(e)}"}, status=500)
-    except smtplib.SMTPAuthenticationError as e:
-        return JsonResponse({'error': 'Authentication failed.'}, status=535)
-    except smtplib.SMTPNotSupportedError:
-        return JsonResponse({'error': 'SMTP command not supported.'}, status=502)
-    except smtplib.SMTPException as e:
-        return JsonResponse({'error': "No suitable authentication method found."}, status=401)
+            try:
+                # Create secure connection with server and send email
+                context = ssl.create_default_context()
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+                    server.login(username, password)
+                    server.sendmail(
+                        username, contact, email.as_string()
+                    )
+                
+            except smtplib.SMTPHeloError as e:
+                return JsonResponse({'error': f"HELO error occurred: {str(e)}"}, status=500)
+            except smtplib.SMTPAuthenticationError as e:
+                return JsonResponse({'error': 'Authentication failed.'}, status=500)
+            except smtplib.SMTPNotSupportedError:
+                return JsonResponse({'error': 'SMTP command not supported.'}, status=500)
+            except smtplib.SMTPException as e:
+                return JsonResponse({'error': "No suitable authentication method found."}, status=500)
     
+    return JsonResponse({'details': "Emails sent successfully!"}, status=200)
 
 def create_pdf(path, transcript):
 
