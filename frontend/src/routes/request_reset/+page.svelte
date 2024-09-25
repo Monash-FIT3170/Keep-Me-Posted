@@ -1,28 +1,28 @@
 <script>
     import { reset_password } from '../../api-functions/reset_password';
     import { backendURL } from "../../api-functions/base-URL";
+    import { goto } from "$app/navigation";
+    import { ResetPasswordStore } from "../../stores/reset-password-store"
 
-
-    let email = "";
-    let message;
+    let message = ""
 
     let requestPasswordReset = async () => {
-        let response = await reset_password(email, backendURL);
-        message = "A password reset link will be sent to your email if you have an account."
+        let response = await reset_password($ResetPasswordStore.email, backendURL);
+        
+        if (response.status === 200) {
+            goto("/reset_password")
+        } else {
+            message = "There is no account matching that email"
+        }
     }
     
 </script>
 
 <div>
-    <h1>Request Password Reset</h1>
-    <form on:submit|preventDefault={requestPasswordReset}>
-        <label for="email">Enter your email:</label>
-        <input type="email" bind:value={email} required />
-
-        <button type="submit">Reset Password</button>
-    </form>
-
+    <h3>Enter your email</h3>
+    <input type="email" bind:value={ $ResetPasswordStore.email}/>
+    <button on:click={() => requestPasswordReset()}>Reset password</button>
     {#if message}
-        <p>{message}</p>
+        <h3>message</h3>
     {/if}
 </div>
