@@ -13,11 +13,10 @@ from emailing.views import send_email
 
 @api_view(['POST'])
 def send_password_reset(request):
-    if request.POST.get("email") == "":
-        return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
-    
+    print(request.POST.get("email"))
+
     user = get_object_or_404(User, email=request.POST.get("email"))
-    
+
     if user:
         emailResponse = send_email(request)
         
@@ -25,14 +24,18 @@ def send_password_reset(request):
             return Response({'details': "Emails sent successfully!"}, status=200)
     
     return Response("Email did not send", status=500)
+
+@api_view(['POST'])
+def reset_password(request):   
+    user = get_object_or_404(User, email=request.POST.get("email"))
+    
+    if user:
+        user.set_password(request.POST.get("password"))
+        user.save()
+        return Response("Password reset successfully", status=200)
+    
+    return Response("Password not reset successfully", status=500)
         
-
-@api_view(['GET'])
-def get_csrf_token(request):
-    csrf_token = get_token(request)
-    print(csrf_token)
-    return Response({'csrfToken': csrf_token})
-
 @api_view(['POST'])
 def login(request):
     """
