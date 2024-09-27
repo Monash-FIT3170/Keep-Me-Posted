@@ -1,21 +1,16 @@
+import { ResetPasswordStore } from "../stores/reset-password-store"
 
-export let reset_password = async (email, baseURL) => {
-    const postRequestString = baseURL + "/send_password_reset" 
+export let reset_password = async (email, password, baseURL) => {
+    const postRequestString = baseURL + "/reset_password" 
 
-    const verficationCode = Math.floor(100000 + Math.random() * 900000)
+    let data = new FormData()
+    data.append('email', email)
+    data.append('password', password)
 
     const response = await fetch(postRequestString, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            email: email,
-            subject: "KMP Password Reset",
-            contacts: [email],
-            message: "You're one time code is " + verficationCode
-        }),
+        body: data
     });
 
-    return response;
+    return response
 }
