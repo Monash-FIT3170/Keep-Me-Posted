@@ -38,6 +38,11 @@
 
 </script>
 
+<!--
+TODO:
+Make this pretty :)
+-->
+
 <div class="flex flex-col">
     <div>Enter your new password</div>
     <input type="password" placeholder="••••••••" bind:value={ password1 }/>

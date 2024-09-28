@@ -12,6 +12,10 @@
     
 </script>
 
+<!--
+TODO:
+Make this pretty :)
+-->
 
 <div class="flex flex-col">
     <div>Enter your email</div>
