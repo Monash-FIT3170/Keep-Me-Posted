@@ -1,8 +1,11 @@
 <script>
-    import { reset_password} from '../../api-functions/reset_password';
-    import { backendURL } from "../../api-functions/base-URL";
-    import { ResetPasswordStore } from "../../stores/reset-password-store"
+    import { reset_password} from '../../../../api-functions/reset_password';
+    import { backendURL } from "../../../../api-functions/base-URL";
     import { goto } from "$app/navigation";
+    import { page } from '$app/stores';
+
+    $: uid = $page.params.uid;
+    $: token = $page.params.token;
     
     let password1 = ""
     let password2 = ""
@@ -21,7 +24,7 @@
             return
         }
 
-        let response = await reset_password($ResetPasswordStore.email, password1, backendURL);
+        let response = await reset_password(uid, token, password1, backendURL);
         
         if (response.status === 200) {
             errorMessage = "Password successfully reset"
@@ -35,14 +38,14 @@
 
 </script>
 
-<div>
-    <h3>Enter your new password</h3>
+<div class="flex flex-col">
+    <div>Enter your new password</div>
     <input type="password" placeholder="••••••••" bind:value={ password1 }/>
-    <h3>Re-enter your new password</h3>
+    <div>Re-enter your new password</div>
     <input type="password" placeholder="••••••••" bind:value={ password2 }/>
 
     <button on:click={() => resetPassword()}>Reset password</button>
     {#if errorMessage}
-        <h3>{errorMessage}</h3>
+        <div>{errorMessage}</div>
     {/if}
 </div>
