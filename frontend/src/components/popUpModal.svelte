@@ -136,29 +136,25 @@
     import TopBar from "../../components/topbar.svelte"
     import PopUpModal from "../../components/popUpModal.svelte";
 
-    let ifError = false
+    let popUpModalComponent;
 
-    function dismissError() {
-        ifError = false;
+    function togglePop() {
+        popUpModalComponent.togglePopUp();
     }
 
 </script>
 
-
-<body>
+<div>
     <TopBar />
-    <button on:click={() => ifError = !ifError}>click to cause error</button>
-    
-    {#if ifError}
-        <PopUpModal 
-        header="Invalid audio format!"
-        mainText="Your meeting audio must be in MP3 or WAV format."
-        type='error'
-        iconPath='../src/assets/error-icon.svg'
-        firstButtonText="Re-upload"
-        firstHandleClick={dismissError}
-        width='96'/>
-    {/if}
+    <button on:click={togglePop}>click to cause error</button>
 
-</body>
+</div>
+
+<PopUpModal
+  bind:this={popUpModalComponent}
+  header="Regenerating..."
+  mainText=""
+  type="loading"
+  firstHandleClick={togglePop}
+/>
 -->
