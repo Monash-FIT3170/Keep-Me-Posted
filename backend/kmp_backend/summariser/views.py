@@ -79,25 +79,27 @@ def generate_title_and_summary(transcript):
 
 def generate_summary(request):
     """Handles the request to generate or regenerate the meeting summary and title."""
-    transcript = request.POST.get("transcript")
-    if transcript == "" or transcript is None:
-        return HttpResponse("Transcript not found", status=404)
+    try:
+        transcript = request.POST.get("transcript")
+        if transcript == "" or transcript is None:
+            return HttpResponse("Transcript not found", status=404)
 
-    title, summary = generate_title_and_summary(transcript)
+        title, summary = generate_title_and_summary(transcript)
 
-    #if an HttpResonse is given, return that HttpResponse
-    if isinstance(summary, HttpResponse):
-        return summary
-    
-    if title is None or summary is None:
-        return HttpResponse("Unsafe transcript provided", status=400)
+        #if an HttpResonse is given, return that HttpResponse
+        if isinstance(summary, HttpResponse):
+            return summary
+        
+        if title is None or summary is None:
+            return HttpResponse("Unsafe transcript provided", status=400)
 
-    response_data = {
-        "title": title,
-        "summary": summary
-    }
-
-    return JsonResponse(response_data, status=200)
+        response_data = {
+            "title": title,
+            "summary": summary
+        }
+        return JsonResponse(response_data, status=200)
+    except HttpError as error:
+        return handle_api_error(error)
 
 def handle_api_error(error):
     """Handles any error codes that Gemini may return."""

@@ -14,6 +14,7 @@
   import { summaryStore } from "../../stores/summary-store";
   import ArrowLeft from "../../assets/arrow-left.png"
   import ArrowRight from "../../assets/arrow-right.png"
+  import PopUpModal from "../../components/popUpModal.svelte";
 
   export let title = "Your Summary is Being Generated...";
   export let subTitle = "We are still generating your summary...";
@@ -49,6 +50,17 @@
       subTitle = "We are still generating your summary...";
     }
   }
+
+  let ifError = false;
+  function dismissError(){
+    ifError = !ifError;
+  }
+
+  let popUpModalComponent;
+
+function openPopUp(){
+  popUpModalComponent.togglePopUp();
+}
 </script>
 
 <body>
@@ -107,4 +119,23 @@
       />
     </div>
   {/if}
+  <div class="flex justify-end ml-auto">
+    <Button
+      handleClick={openPopUp}
+      type="secondary-with-border"
+      text="cause error popup"
+      minHeight="8"
+    ></Button>
+  </div>
+
+    <PopUpModal 
+    bind:this={popUpModalComponent}
+    header="Gemini Error"
+    mainText="test modal for gemini api error"
+    type='error'
+    iconPath='../src/assets/error-icon.svg'
+    firstButtonText="Close"
+    firstHandleClick={openPopUp}
+    width='300'/>
+
 </body>
