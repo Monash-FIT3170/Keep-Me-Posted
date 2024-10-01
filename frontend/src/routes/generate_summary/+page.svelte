@@ -50,17 +50,7 @@
       subTitle = "We are still generating your summary...";
     }
   }
-
-  let ifError = false;
-  function dismissError(){
-    ifError = !ifError;
-  }
-
-  let popUpModalComponent;
-
-function openPopUp(){
-  popUpModalComponent.togglePopUp();
-}
+  
 </script>
 
 <body>
@@ -119,23 +109,4 @@ function openPopUp(){
       />
     </div>
   {/if}
-  <div class="flex justify-end ml-auto">
-    <Button
-      handleClick={openPopUp}
-      type="secondary-with-border"
-      text="cause error popup"
-      minHeight="8"
-    ></Button>
-  </div>
-
-    <PopUpModal 
-    bind:this={popUpModalComponent}
-    header="Gemini Error"
-    mainText="test modal for gemini api error"
-    type='error'
-    iconPath='../src/assets/error-icon.svg'
-    firstButtonText="Close"
-    firstHandleClick={openPopUp}
-    width='300'/>
-
 </body>
