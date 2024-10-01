@@ -4,7 +4,7 @@
 
     Author: Parul Garg (pgar0011)
     Edited By: Angelina Leung (aleu0007), Maureen Pham (mpha0039), Danny Leung (dleu0007), Rohit Valanki (rval0008)
-    Last Modified: 12/09/24
+    Last Modified: 1/10/2024 by Alex Ung
 
 -->
 
@@ -152,7 +152,6 @@
       iconPath='../src/assets/error-icon.svg'
       firstButtonText="Close"
       firstHandleClick={openPopUp}
-      width='300'
     />
   </body>
 </html>

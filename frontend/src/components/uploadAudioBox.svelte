@@ -10,7 +10,7 @@
 
 	Authors: Parul Garg (pgar0011)
 	Editied by: Benjamin Cherian, Zihao Wang, Angelina Leung, Maureen Pham, Danny Leung
-	Last Modified: 14/08/24
+	Last Modified: 1/10/24 by Alex Ung
 
 -->
 <!-- JavaScript -->
@@ -100,6 +100,7 @@
 			console.log('Transcript received');
 			return send_summary(transcript, backendURL);  // Return the next promise
 		}).then(summary => {
+			//If no summary is generated, raise an error
 			if($summaryStore.summary == "" || $summaryStore.title == ""){
 				goto("/upload_audio");
 				resetStores();
