@@ -24,6 +24,14 @@
   export let width = "64"; // default width of pop up
   export let visible = false; // Default state of popup is not visible
 
+  const widthClasses = {
+  '96': 'w-96',     // 24rem
+  '80': 'w-80',     // 20rem
+  '64': 'w-64',     // 16rem
+  '48': 'w-48',     // 12rem
+  'full': 'w-full', // 100%
+  };
+
   export function togglePopUp() {
     visible = !visible;
   }
@@ -61,7 +69,7 @@
       <div
         class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
       >
-        <div class="bg-white rounded-lg p-4 w-{width}">
+        <div class={`bg-white rounded-lg p-4 ${widthClasses[width]}`}>
           {#if iconPath}
             <div class="flex items-center justify-center pb-2">
               <img class="h-12" src={iconPath} alt="pop up icon" />
@@ -136,29 +144,25 @@
     import TopBar from "../../components/topbar.svelte"
     import PopUpModal from "../../components/popUpModal.svelte";
 
-    let ifError = false
+    let popUpModalComponent;
 
-    function dismissError() {
-        ifError = false;
+    function togglePop() {
+        popUpModalComponent.togglePopUp();
     }
 
 </script>
 
-
-<body>
+<div>
     <TopBar />
-    <button on:click={() => ifError = !ifError}>click to cause error</button>
-    
-    {#if ifError}
-        <PopUpModal 
-        header="Invalid audio format!"
-        mainText="Your meeting audio must be in MP3 or WAV format."
-        type='error'
-        iconPath='../src/assets/error-icon.svg'
-        firstButtonText="Re-upload"
-        firstHandleClick={dismissError}
-        width='96'/>
-    {/if}
+    <button on:click={togglePop}>click to cause error</button>
 
-</body>
+</div>
+
+<PopUpModal
+  bind:this={popUpModalComponent}
+  header="Regenerating..."
+  mainText=""
+  type="loading"
+  firstHandleClick={togglePop}
+/>
 -->
