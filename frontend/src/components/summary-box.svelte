@@ -194,5 +194,5 @@
   mainText=""
   type="loading"
   firstHandleClick={openRegeneratePopUp}
-  width="96"
+  width=96
 />

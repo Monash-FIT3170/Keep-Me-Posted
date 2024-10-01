@@ -21,7 +21,7 @@
   export let firstButtonText = "Button"; // Text for primary button (dark blue, or red)
   export let secondButtonText = "Button"; // Text for secondary button (light blue)
   export let iconPath = ""; // path for image icon
-  export let width = "64"; // default width of pop up
+  export let width = 64; // default width of pop up
   export let visible = false; // Default state of popup is not visible
 
   export function togglePopUp() {
