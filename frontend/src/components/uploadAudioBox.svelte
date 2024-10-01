@@ -27,6 +27,8 @@
 	import PopUpModal from "./popUpModal.svelte"; // Import the PopUpModal component
     import { resetStores } from "../stores/reset-store";
 	import { goto } from "$app/navigation";
+  	import { summaryStore } from "../stores/summary-store";
+	
 
 	// content
 	let popUpModalComponent; // Pointer for the PopUpModal component
@@ -37,12 +39,14 @@
 	const errorMessage = {
 		DURATION_EXCEEDED: ["Meeting duration exceeded", "Your meeting audio should be less than 120 minutes.", "Re-upload"],
 		INVALID_FORMAT: ["Invalid audio format!", "Your meeting audio must be in MP3 or WAV format.", "Re-upload"],
-		ASSEMBLYAI_ERROR: ["AssemblyAI Error name", "Some description of the error. Please try again later", "Close"],	
+		ASSEMBLYAI_ERROR: ["AssemblyAI Error name", "Some description of the error. Please try again later", "Close"],
+		GEMINI_ERROR: ["Gemini Error,", "Sorry...something went wrong", "Close"]	
 	};
 
 	
 	let popupHeader = ''; // Header for the popup
 	let popupMainText = ''; // Main text for the popup
+	let popupButtonText = '';
 
 	async function handleFilesSelect(e) {
 		const { acceptedFiles } = e.detail;
@@ -96,6 +100,12 @@
 			console.log('Transcript received');
 			return send_summary(transcript, backendURL);  // Return the next promise
 		}).then(summary => {
+			if($summaryStore.summary == "" || $summaryStore.title == ""){
+				goto("/upload_audio");
+				resetStores();
+				raiseError(errorMessage.GEMINI_ERROR)
+				return
+			}
 			if ($apiStatusStore == "Cancel") {
 				console.log("Upload cancelled after summary");
 				return Promise.reject("Upload cancelled")
@@ -119,9 +129,11 @@
 		// Setting the popup modal properties based on the error type
 		popupHeader = errorType[0];
 		popupMainText = errorType[1];
+		popupButtonText = errorType[2];
 
 		// Toggle the popup modal visibility
 		popUpModalComponent.togglePopUp();
+		
   	}
 
 	// Function to dismiss the error popup modal
@@ -174,8 +186,7 @@
 	type="error"
 	header={popupHeader}
 	mainText={popupMainText}
-	firstButtonText="Re-upload"
+	firstButtonText={popupButtonText}
 	firstHandleClick={dismissError}
 	width="96"
 />
-
