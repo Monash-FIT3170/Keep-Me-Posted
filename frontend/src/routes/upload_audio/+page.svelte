@@ -21,6 +21,7 @@
   import RightArrow from "../../assets/arrow-right.png";
   import { onMount, onDestroy } from "svelte";
   import { updateAuth, authStore } from "../../stores/auth-store.js";
+  import PopUpModal from "../../components/popUpModal.svelte";
 
   let loggedIn;
   let googleAuth = false;
@@ -96,6 +97,15 @@
     apiStatusStore.set("");
     resetStores();
   }
+
+  let popUpModalComponent;
+  let errorMessage = "Something went wrong, please try again!";
+
+  function openPopUp() {
+    if (popUpModalComponent) {
+      popUpModalComponent.togglePopUp();
+    }
+  }
 </script>
 
 <html lang="en">
@@ -111,7 +121,7 @@
       Upload your meeting audio for us to summarise.
     </div>
 
-    <UploadBox />
+    <UploadBox popUpModal = {popUpModalComponent}/>
 
     <Toggle />
 
@@ -134,5 +144,15 @@
         type={$apiStatusStore == "" ? "disabled" : "primary"}
       ></Button>
     </div>
+      <PopUpModal 
+      bind:this={popUpModalComponent}
+      header="Oops..."
+      mainText={errorMessage}
+      type='error'
+      iconPath='../src/assets/error-icon.svg'
+      firstButtonText="Close"
+      firstHandleClick={openPopUp}
+      width='300'
+    />
   </body>
 </html>
