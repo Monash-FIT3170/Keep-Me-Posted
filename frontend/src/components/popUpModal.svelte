@@ -21,8 +21,16 @@
   export let firstButtonText = "Button"; // Text for primary button (dark blue, or red)
   export let secondButtonText = "Button"; // Text for secondary button (light blue)
   export let iconPath = ""; // path for image icon
-  export let width = 64; // default width of pop up
+  export let width = "64"; // default width of pop up
   export let visible = false; // Default state of popup is not visible
+
+  const widthClasses = {
+  '96': 'w-96',     // 24rem
+  '80': 'w-80',     // 20rem
+  '64': 'w-64',     // 16rem
+  '48': 'w-48',     // 12rem
+  'full': 'w-full', // 100%
+  };
 
   export function togglePopUp() {
     visible = !visible;
@@ -61,7 +69,7 @@
       <div
         class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
       >
-        <div class="bg-white rounded-lg p-4 w-{width}">
+        <div class={`bg-white rounded-lg p-4 ${widthClasses[width]}`}>
           {#if iconPath}
             <div class="flex items-center justify-center pb-2">
               <img class="h-12" src={iconPath} alt="pop up icon" />
