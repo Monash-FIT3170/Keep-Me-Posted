@@ -67,7 +67,7 @@
       class="justify-center items-center font-sans h-fulltransition ease-in-out duration-300"
     >
       <div
-        class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+        class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 backdrop-filter backdrop-blur-md"
       >
         <div class={`bg-white rounded-lg p-4 ${widthClasses[width]}`}>
           {#if iconPath}
