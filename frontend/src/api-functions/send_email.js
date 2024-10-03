@@ -1,7 +1,7 @@
 // send email api function. 
 // message: String, subject: String, Contacts: [String]
 import { emailStatusStore } from "../stores/email-status-store"
-
+import { getAuth } from "../stores/auth-store"  // Import getAuth to retrieve user's email
 
 export let send_email = async (transcript, message, subject, contacts, baseURL) => {
     const postRequestString = baseURL + "/api/sendemail" 
@@ -10,6 +10,11 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
     data.append('message', message)
     data.append('subject', subject)
     data.append('contacts', contacts)
+    
+    // Get the logged-in user's email or default to "Guest" if not logged in
+    let userEmail = getAuth().email || "Guest";  // Add user's email to form data
+    data.append('userEmail', userEmail);  // Pass the user's email along with the request
+
     if (transcript) {
         data.append('transcript', transcript);
     }
