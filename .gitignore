@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 venv
 **/__pycache__/
 **/db.sqlite3
+/migrations
