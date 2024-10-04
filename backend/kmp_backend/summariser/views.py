@@ -13,6 +13,7 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 # Create your views here.
 
 def generate_title_and_summary(transcript):
+    return HttpResponse("Unsafe transcript provided", status=400)
     """Generates a title and summary for the meeting transcript."""
     
     # No transcript provided
@@ -78,6 +79,7 @@ def generate_title_and_summary(transcript):
 
 
 def generate_summary(request):
+    return HttpResponse("Unsafe transcript provided", status=400)
     """Handles the request to generate or regenerate the meeting summary and title."""
     try:
         transcript = request.POST.get("transcript")
