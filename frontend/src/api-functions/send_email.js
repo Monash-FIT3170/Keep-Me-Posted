@@ -16,6 +16,19 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
 
     try {
         const response = await fetch(postRequestString, { method: "POST", body: data})
+
+        // Check if error occurred
+        if (!response.ok) {
+            // Retrieve error
+            const errorResponse = await response.json();
+            
+            // Update the error store with the associated error message
+            errorStore.set({
+                message: errorResponse.message
+            });
+            return null;
+        };
+
         const jsonResponse = await response.json()
 
         console.log("email sent")
@@ -24,6 +37,11 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
         return jsonResponse.details;
     } catch (error) {
         console.error("Error:", error)
+
+        // Update the error store with the associated error message
+        errorStore.set({
+            message: error.message
+        });
         return null
     }
 }
