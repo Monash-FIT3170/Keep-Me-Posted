@@ -41,11 +41,7 @@
 	const errorMessage = {
 		DURATION_EXCEEDED: ["Meeting duration exceeded", "Your meeting audio should be less than 120 minutes.", "Re-upload"],
 		INVALID_FORMAT: ["Invalid audio format!", "Your meeting audio must be in MP3 or WAV format.", "Re-upload"],
-		ASSEMBLYAI_ERROR: ["AssemblyAI Error name", "Some description of the error. Please try again later", "Close"],
-		GEMINI_ERROR: ["Ooops!", "Something went wrong, please try again later!", "Close"],
-		UNSAFE_ERROR: ["Unsafe Transcript Detected!","Please use a different audio file.","close"]	
 	};
-
 	
 	let popupHeader = ''; // Header for the popup
 	let popupMainText = ''; // Main text for the popup
@@ -113,19 +109,14 @@
 			return send_summary(transcript, backendURL);  // Return the next promise
 		}).then(summary => {
 
-			// if the store values are unsafe, raise an error
-			if(($summaryStore.summary == "unsafe transcript" || $summaryStore.title == "unsafe transcript")){
-				goto("/upload_audio");
-				resetStores();
-				raiseError(errorMessage.UNSAFE_ERROR)
-				return
-			}
-
 			//If no summary is generated, raise an error
 			if($errorStore){
 				goto("/upload_audio");
+				// raise the error with the code in the errorStore
+				errorStore.subscribe((value) => {
+					raiseError(value.message)
+            	});
 				resetStores();
-				raiseError(errorMessage.GEMINI_ERROR)
 				return
 			}
 			if ($apiStatusStore == "Cancel") {
@@ -149,9 +140,10 @@
 	// Function to trigger the appropriate error popup modal based on the error type
 	function raiseError(errorType) {
 		// Setting the popup modal properties based on the error type
-		popupHeader = errorType[0];
-		popupMainText = errorType[1];
-		popupButtonText = errorType[2];
+		const errorInfo = handle_error(errorType)
+		popupHeader = errorInfo.title;
+		popupMainText = errorInfo.message;
+		popupButtonText = errorInfo.btnText;
 
 		// Toggle the popup modal visibility
 		popUpModalComponent.togglePopUp();
@@ -163,6 +155,52 @@
 		// Toggle the popup modal visibility
 		popUpModalComponent.togglePopUp();
 	}
+
+
+	function handle_error(error){
+		//Handles any error codes that Gemini may return.
+		
+		const errorResponses = {
+		"400": {
+			message: "Please check the request format and try again.",
+			title: "Invalid Request",
+			btnText: "Close"
+		},
+		"403": {
+			message: "Please check your API key and permissions.",
+			title: "Permission Denied",
+			btnText: "Close"
+		},
+		"404": {
+			message: "Please check the request URL and try again.",
+			title: "Resource not found",
+			btnText: "Close"
+		},
+		"429": {
+			message: "xPlease wait and try again later.",
+			title: "Rate limit exceeded.",
+			btnText: "Close"
+		},
+		"500": {
+			message: "Please try again later.",
+			title: "Internal server error.",
+			btnText: "Close"
+		},
+		"503": {
+			message: "Please try again later.",
+			title: "Service unavailable.",
+			btnText: "Close"
+		},
+		"511": {
+			message: "Please use a different audio file.",
+			title: "Unsafe transcript detected",
+			btnText: "Close"
+		}
+
+	};
+	console.log(error)
+	return errorResponses[error]
+}
 </script>
 
 <!-- COMPONENT -->
