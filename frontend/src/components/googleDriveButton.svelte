@@ -1,3 +1,11 @@
+<!-- Google Drive Button Component
+
+    Contains google file picker to allow users to upload files from their google drive
+
+    Author: Ahmed Almasry, Maureen Pham
+    Last modified: 14/09/2024
+
+-->
 <script>
     import { onMount } from "svelte";
     import Button from "./button.svelte";
@@ -95,10 +103,6 @@
         }
     }
 
-// get webcontentlink
-// send link to backend - make a function in assemblyai views with a POST request to the url, put new url in urls
-// make backend download that file
-// send file to assemblyai to transcribe
 
 </script>
 
