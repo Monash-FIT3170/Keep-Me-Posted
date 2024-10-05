@@ -100,8 +100,7 @@
       <div>
         {#if (email)} <!-- Check if email is available -->
           <button 
-            on:click={() => goto("/profile")} 
-            on:mouseenter={hover} 
+            on:click={hover} 
             on:mouseleave={antiHover}
             class="relative"
           >
@@ -112,7 +111,6 @@
 
           {#if showDropdown}
           <button 
-            on:click={copyUser}
             on:mouseenter={hover} 
             on:mouseleave={antiHover}
             class="w-fit absolute bg-white shadow right-16 py-2 rounded-lg z-50"
@@ -123,6 +121,22 @@
                   {email} <!-- Show the logged-in user's email -->
                 </div>
                 <div class="w-full border-t border-gray-100"></div>
+                <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
+                  <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={() => goto("/profile")} >
+                    <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
+                      <img class="h-4" src={historyIcon} alt="Summary History icon" />
+                      <div class="text-gray-700 text-base px-3">Summary History</div>
+                    </div>
+                  </button>
+                </div>
+                <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
+                  <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={() => goto("/profile")} >
+                    <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
+                      <img class="h-4" src={historyIcon} alt="Summary History icon" />
+                      <div class="text-gray-700 text-base px-3">Summary History</div>
+                    </div>
+                  </button>
+                </div>
                 <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
                   <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={() => goto("/profile")} >
                     <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
