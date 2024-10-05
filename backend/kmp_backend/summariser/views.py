@@ -10,10 +10,9 @@ from googleapiclient.errors import HttpError
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Create your views here.
+# Create your views here.W
 
 def generate_title_and_summary(transcript):
-    return HttpResponse("Unsafe transcript provided", status=400)
     """Generates a title and summary for the meeting transcript."""
     
     # No transcript provided
@@ -79,7 +78,6 @@ def generate_title_and_summary(transcript):
 
 
 def generate_summary(request):
-    return HttpResponse("Unsafe transcript provided", status=400)
     """Handles the request to generate or regenerate the meeting summary and title."""
     try:
         transcript = request.POST.get("transcript")
@@ -93,7 +91,7 @@ def generate_summary(request):
             return summary
         
         if title is None or summary is None:
-            return HttpResponse("Unsafe transcript provided", status=400)
+            return 400,HttpResponse("An unexpected error occurred. Please try again later.", status=400)
 
         response_data = {
             "title": title,
