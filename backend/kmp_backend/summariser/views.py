@@ -17,7 +17,7 @@ def generate_title_and_summary(transcript):
     
     # No transcript provided
     if not transcript.strip():
-        return None, "No summary can be generated without a transcript."
+        return None, "No summary can be generated without a transcript.", True
 
     # Title generation prompt
     title_prompt = (
@@ -85,14 +85,13 @@ def generate_summary(request):
             return HttpResponse("Transcript not found", status=404)
 
         title, summary, isSafe = generate_title_and_summary(transcript)
-        print(title, summary, isSafe)
         #if an HttpResonse is given, return that HttpResponse
         if isinstance(summary, HttpResponse):
             return summary
         
         if title is None or summary is None:
             if not isSafe:
-                return HttpResponse("Unsafe Error Detected", status=511)
+                return HttpResponse("Unsafe transcript provided", status=511)
             return HttpResponse("Unexpected Error Occurred", status=400)
 
         response_data = {
@@ -115,4 +114,4 @@ def handle_api_error(error):
         503: HttpResponse("Service unavailable. Please try again later.", status=503),
     }
     #return the error, if the error is not in the list of error responses, return a generic response
-    return error.status_code,error_responses.get(error.status_code, HttpResponse("An unexpected error occurred. Please try again later.", status=500))
+    return error.status_code,error_responses.get(error.status_code, HttpResponse("An unexpected error occurred. Please try again later.", status=500)),True
