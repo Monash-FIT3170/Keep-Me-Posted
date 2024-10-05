@@ -17,7 +17,7 @@
     $: sendWithTranscriptStore.set(isChecked);
 </script>
 
-<div class="flex items-center justify-center p-10">
+<div class="flex items-center justify-center p-8">
 
   <label class="flex items-center space-x-2">
     <input
