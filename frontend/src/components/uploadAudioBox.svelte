@@ -30,6 +30,7 @@
   	import { summaryStore } from "../stores/summary-store";
 	import { errorStore } from "../stores/error-store";
 	
+  	import { onMount } from "svelte";
 
 	// content
 	let popUpModalComponent; // Pointer for the PopUpModal component
@@ -50,6 +51,14 @@
 	let popupMainText = ''; // Main text for the popup
 	let popupButtonText = '';
 
+	onMount(() => {
+		window.addEventListener("fileSelected", handleFilesSelect);
+
+		return () => {
+			window.removeEventListener("fileSelected", handleFilesSelect);
+		};
+	})
+
 	async function handleFilesSelect(e) {
 		const { acceptedFiles } = e.detail;
 
@@ -59,7 +68,8 @@
 			// Initial file type check before loading it as an audio source
 			if (
 				!selectedFile.name.endsWith(".mp3") &&
-				!selectedFile.name.endsWith(".wav")
+				!selectedFile.name.endsWith(".wav") &&
+				!selectedFile.name.endsWith(".mp4")
 			) {
 				raiseError(errorMessage.INVALID_FORMAT);
 				return; // Exit the function early if file type is incorrect
@@ -156,7 +166,7 @@
 </script>
 
 <!-- COMPONENT -->
-<div class= "flex items-center justify-center">
+<div class= "flex items-center justify-center mb-4">
     <!-- upload-audio-box -->
 	 {#if $apiStatusStore == "" || $apiStatusStore == "Cancel"}
 	 	<!-- BLUE with dropzone -->

@@ -13,6 +13,7 @@
   import Button from "../../components/button.svelte";
   import Topbar from "../../components/topbar.svelte";
   import Toggle from "../../components/toggle.svelte";
+  import GoogleDriveButton from "../../components/googleDriveButton.svelte";
   import UploadBox from "../../components/uploadAudioBox.svelte";
   import { goto } from "$app/navigation";
   import { apiStatusStore } from "../../stores/api-status-store";
@@ -122,6 +123,8 @@
     </div>
 
     <UploadBox popUpModal = {popUpModalComponent}/>
+
+    <GoogleDriveButton />
 
     <Toggle />
 
