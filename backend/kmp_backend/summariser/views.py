@@ -61,18 +61,18 @@ def generate_title_and_summary(transcript):
         # Check for prompt feedback in title generation
         title_feedback = title_response.prompt_feedback
         if title_feedback and "block_reason" in title_feedback:
-            return None, None
+            return None, None, False
 
         # Check for prompt feedback in summary generation
         summary_feedback = summary_response.prompt_feedback
         if summary_feedback and "block_reason" in summary_feedback:
-            return None, None
+            return None, None, False
 
         # Extract and return title and summary
         title = title_response.text.strip()
         summary = summary_response.text.strip()
 
-        return title, summary
+        return title, summary, True
     except HttpError as error:
         return handle_api_error(error)
 
@@ -84,14 +84,16 @@ def generate_summary(request):
         if transcript == "" or transcript is None:
             return HttpResponse("Transcript not found", status=404)
 
-        title, summary = generate_title_and_summary(transcript)
-
+        title, summary, isSafe = generate_title_and_summary(transcript)
+        print(title, summary, isSafe)
         #if an HttpResonse is given, return that HttpResponse
         if isinstance(summary, HttpResponse):
             return summary
         
         if title is None or summary is None:
-            return 400,HttpResponse("An unexpected error occurred. Please try again later.", status=400)
+            if not isSafe:
+                return HttpResponse("Unsafe Error Detected", status=511)
+            return HttpResponse("Unexpected Error Occurred", status=400)
 
         response_data = {
             "title": title,
@@ -99,6 +101,7 @@ def generate_summary(request):
         }
         return JsonResponse(response_data, status=200)
     except HttpError as error:
+
         return handle_api_error(error)
 
 def handle_api_error(error):

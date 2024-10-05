@@ -12,7 +12,7 @@ export let send_summary = async (transcript, baseURL) => {
 
     try {
         const response = await fetch(postRequestString, { method: "POST", body: data });
-
+        
         // Check if error occurred
         if (!response.ok) {
             // Update the error store with the associated error message
