@@ -1,0 +1,12 @@
+### Create a meeting
+POST http://127.0.0.1:8000/meetings/
+Content-Type: application/json
+
+{
+  "user_email": "user@example.com",
+  "meeting_string": "Team Meeting",
+  "meeting_date": "2024-10-05T14:00:00Z"
+}
+
+### Retrieve meetings for the user
+GET http://127.0.0.1:8000/meetings/user@example.com/
