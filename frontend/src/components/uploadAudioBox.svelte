@@ -28,6 +28,7 @@
     import { resetStores } from "../stores/reset-store";
 	import { goto } from "$app/navigation";
   	import { summaryStore } from "../stores/summary-store";
+	import { errorStore } from "../stores/error-store";
 	
 
 	// content
@@ -40,7 +41,8 @@
 		DURATION_EXCEEDED: ["Meeting duration exceeded", "Your meeting audio should be less than 120 minutes.", "Re-upload"],
 		INVALID_FORMAT: ["Invalid audio format!", "Your meeting audio must be in MP3 or WAV format.", "Re-upload"],
 		ASSEMBLYAI_ERROR: ["AssemblyAI Error name", "Some description of the error. Please try again later", "Close"],
-		GEMINI_ERROR: ["Gemini Error,", "Sorry...something went wrong", "Close"]	
+		GEMINI_ERROR: ["Ooops!", "Something went wrong, please try again later!", "Close"],
+		UNSAFE_ERROR: ["Unsafe Transcript Detected!","Please use a different audio file.","close"]	
 	};
 
 	
@@ -100,8 +102,17 @@
 			console.log('Transcript received');
 			return send_summary(transcript, backendURL);  // Return the next promise
 		}).then(summary => {
+
+			// if the store values are unsafe, raise an error
+			if(($summaryStore.summary == "unsafe transcript" || $summaryStore.title == "unsafe transcript")){
+				goto("/upload_audio");
+				resetStores();
+				raiseError(errorMessage.UNSAFE_ERROR)
+				return
+			}
+
 			//If no summary is generated, raise an error
-			if($summaryStore.summary == "" || $summaryStore.title == ""){
+			if($errorStore){
 				goto("/upload_audio");
 				resetStores();
 				raiseError(errorMessage.GEMINI_ERROR)
