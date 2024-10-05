@@ -15,24 +15,9 @@ export let send_summary = async (transcript, baseURL) => {
 
         // Check if error occurred
         if (!response.ok) {
-            console.log(response.status);
-            // if an unsafe transcript is detected, update the summary-store
-            if (response.status == 400) {
-                summaryStore.set({
-                    summary: "unsafe transcript",
-                    subject: "unsafe transcript"
-                })
-                return null;
-            }
-
-            // Retrieve error
-            const errorResponse = await response.json();
-            
-            console.log(errorResponse.message);
-            
             // Update the error store with the associated error message
             errorStore.set({
-                message: errorResponse.message
+                message: response.status
             });
             return null;
         };
