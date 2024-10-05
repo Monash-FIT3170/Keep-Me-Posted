@@ -9,7 +9,7 @@
 -->
 
 <script>
-  //required imports
+  // Required imports
   import Button from "../../components/button.svelte";
   import Topbar from "../../components/topbar.svelte";
   import Toggle from "../../components/toggle.svelte";
@@ -22,6 +22,7 @@
   import RightArrow from "../../assets/arrow-right.png";
   import { onMount, onDestroy } from "svelte";
   import { updateAuth, authStore } from "../../stores/auth-store.js";
+  import { fetchMeetings, meetings } from "../../stores/past-meetings-store"; // Import meetings store
 
   let loggedIn;
   let googleAuth = false;
@@ -33,6 +34,7 @@
   const unsubscribe = authStore.subscribe((value) => {
     loggedIn = value.loggedIn;
   });
+
   // Clean up the subscription when the component is destroyed
   onDestroy(() => {
     unsubscribe();
@@ -84,6 +86,20 @@
         );
       }
     }
+
+    // Fetch meetings for the user
+    fetchMeetings(userEmail);
+
+    // Log meetings when they are updated in the store
+    const unsubscribeMeetings = meetings.subscribe(meetingsList => {
+        console.log('Current Meetings:', meetingsList);
+    });
+
+    // Cleanup subscription for meetings when the component is destroyed
+    onDestroy(() => {
+        unsubscribeMeetings();
+    });
+
   });
 
   // Function to navigate to the summary page and update the status to "Viewed"
