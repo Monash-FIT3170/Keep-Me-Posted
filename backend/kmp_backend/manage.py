@@ -7,8 +7,8 @@ def check_env_vars():
     """Log missing environment variables"""
     required_env_vars = ['GEMINI_API_KEY', 'ASSEMBLYAI_API_KEY', 'SMTP_EMAIL', 'SMTP_API_KEY']
     for var in required_env_vars:
-        var = os.getenv(var)
-        if not var or var == "REPLACE_WITH_API_KEY":
+        env_var = os.getenv(var)
+        if not env_var or env_var == "REPLACE_WITH_API_KEY":
             print(f"Missing required environment variable: {var}")
 
 
