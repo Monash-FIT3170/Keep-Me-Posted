@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
         const envValue = env[varName];
     
         // check if environment variable is missing
-        if (!envValue || envValue === undefined) {
+        if (!envValue) {
             console.error(`Missing required frontend environment variable: ${varName}`)
         }
     
