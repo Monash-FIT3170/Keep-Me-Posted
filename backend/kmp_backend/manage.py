@@ -3,9 +3,19 @@
 import os
 import sys
 
+def check_env_vars():
+    """Log missing environment variables"""
+    required_env_vars = ['GEMINI_API_KEY', 'ASSEMBLYAI_API_KEY', 'SMTP_EMAIL', 'SMTP_API_KEY']
+    for var in required_env_vars:
+        var = os.getenv(var)
+        if not var or var == "REPLACE_WITH_API_KEY":
+            print(f"Missing required environment variable: {var}")
+
 
 def main():
     """Run administrative tasks."""
+    check_env_vars()  # check environment variables before running anything
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kmp_backend.settings')
     try:
         from django.core.management import execute_from_command_line
