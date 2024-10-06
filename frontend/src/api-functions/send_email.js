@@ -24,7 +24,7 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
             
             // Update the error store with the associated error message
             errorStore.set({
-                message: errorResponse.message
+                message: response.status
             });
             return null;
         };
@@ -40,7 +40,7 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
 
         // Update the error store with the associated error message
         errorStore.set({
-            message: error.message
+            message: response.status
         });
         return null
     }
