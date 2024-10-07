@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import generics  # Make sure to import generics
-from .models import Meeting  # Your Meeting model
-from .serializers import MeetingSerializer  # Your Meeting serializer
+from rest_framework import generics
+from .models import Meeting
+from .serializers import MeetingSerializer
 
 # View to create a meeting
 class MeetingCreateView(APIView):
