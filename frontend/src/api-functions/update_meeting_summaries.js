@@ -3,11 +3,12 @@
 import { emailStatusStore } from "../stores/email-status-store"
 
 
-export let update_meeting_summary = async (user_email, meeting_transcript, meeting_summary, meeting_recipients, meeting_date, baseURL) => {
+export let update_meeting_summary = async (user_email, meeting_subject, meeting_transcript, meeting_summary, meeting_recipients, meeting_date, baseURL) => {
     const postRequestString = baseURL + "/meetings/" 
 
     let data = new FormData()
     data.append('user_email', user_email)
+    data.append('meeting_subject', meeting_subject)
     data.append('meeting_transcript', meeting_transcript)
     data.append('meeting_summary', meeting_summary)
     data.append('meeting_recipients', JSON.stringify(meeting_recipients))

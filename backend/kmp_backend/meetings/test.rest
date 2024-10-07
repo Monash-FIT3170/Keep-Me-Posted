@@ -4,6 +4,7 @@ Content-Type: application/json
 
 {
   "user_email": "rohitvalanki@gmail.com",
+  "meeting_subject": "Meeting Subject",
   "meeting_transcript": "Team Meetings 2",
   "meeting_summary": "Discussed project milestones and deadlines.",
   "meeting_recipients": ["recipient1@example.com", "recipient2@example.com"],
