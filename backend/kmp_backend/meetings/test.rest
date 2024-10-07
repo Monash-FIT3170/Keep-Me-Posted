@@ -3,8 +3,8 @@ POST http://127.0.0.1:8000/meetings/
 Content-Type: application/json
 
 {
-  "user_email": "ironrohitman9@gmail.com",
-  "meeting_transcript": "Team Meetings",
+  "user_email": "rohitvalanki@gmail.com",
+  "meeting_transcript": "Team Meetings 2",
   "meeting_summary": "Discussed project milestones and deadlines.",
   "meeting_recipients": ["recipient1@example.com", "recipient2@example.com"],
   "meeting_date": "2024-10-05T14:00:00Z"
