@@ -11,10 +11,6 @@
   import { onMount } from "svelte";
   import ArrowLeft from "../../assets/arrow-left.png"
   import ArrowRight from "../../assets/arrow-right.png"
-  import { update_meeting_summary } from "../../api-functions/update_meeting_summaries"
-
-
-  update_meeting_summary("rohitvalanki@gmail.com", "Meeting Subject", "Team Meetings 2", "Discussed project milestones and deadlines.", ["testrecipient1@example.com", "testrecipient2@example.com"], "2024-10-05T14:00:00Z", "http://127.0.0.1:8000")
 
   onMount(() => {
     if ($authStore["loggedIn"] == true) {
