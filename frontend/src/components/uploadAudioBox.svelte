@@ -10,7 +10,7 @@
 
 	Authors: Parul Garg (pgar0011)
 	Editied by: Benjamin Cherian, Zihao Wang, Angelina Leung, Maureen Pham, Danny Leung
-	Last Modified: 14/08/24
+	Last Modified: 1/10/24 by Alex Ung
 
 -->
 <!-- JavaScript -->
@@ -27,6 +27,9 @@
 	import PopUpModal from "./popUpModal.svelte"; // Import the PopUpModal component
     import { resetStores } from "../stores/reset-store";
 	import { goto } from "$app/navigation";
+  	import { summaryStore } from "../stores/summary-store";
+	import { errorStore } from "../stores/error-store";
+	
   	import { onMount } from "svelte";
 
 	// content
@@ -38,12 +41,11 @@
 	const errorMessage = {
 		DURATION_EXCEEDED: ["Meeting duration exceeded", "Your meeting audio should be less than 120 minutes.", "Re-upload"],
 		INVALID_FORMAT: ["Invalid audio format!", "Your meeting audio must be in MP3 or WAV format.", "Re-upload"],
-		ASSEMBLYAI_ERROR: ["AssemblyAI Error name", "Some description of the error. Please try again later", "Close"],	
 	};
-
 	
 	let popupHeader = ''; // Header for the popup
 	let popupMainText = ''; // Main text for the popup
+	let popupButtonText = '';
 
 	onMount(() => {
 		window.addEventListener("fileSelected", handleFilesSelect);
@@ -106,6 +108,15 @@
 			console.log('Transcript received');
 			return send_summary(transcript, backendURL);  // Return the next promise
 		}).then(summary => {
+
+			//If no summary is generated, raise an error
+			if($errorStore){
+				goto("/upload_audio");
+				// raise the error with the code in the errorStore
+				raiseError($errorStore)
+				resetStores();
+				return
+			}
 			if ($apiStatusStore == "Cancel") {
 				console.log("Upload cancelled after summary");
 				return Promise.reject("Upload cancelled")
@@ -126,9 +137,10 @@
 
 	// Function to trigger the appropriate error popup modal based on the error type
 	function raiseError(errorType) {
-		// Setting the popup modal properties based on the error type
-		popupHeader = errorType[0];
-		popupMainText = errorType[1];
+		const errorInfo = handle_error(errorType)
+		popupHeader = errorInfo.title;
+		popupMainText = errorInfo.message;
+		popupButtonText = errorInfo.btnText;
 
 		// Toggle the popup modal visibility
 		popUpModalComponent.togglePopUp();
@@ -139,6 +151,57 @@
 		// Toggle the popup modal visibility
 		popUpModalComponent.togglePopUp();
 	}
+
+
+	function handle_error(error){
+		//Handles any error codes that Gemini may return.
+		
+		const errorResponses = {
+		"400": {
+			message: "Please check the request format and try again.",
+			title: "Invalid Request",
+			btnText: "Close"
+		},
+		"403": {
+			message: "Please check your API key and permissions.",
+			title: "Permission Denied",
+			btnText: "Close"
+		},
+		"404": {
+			message: "Please check the request URL and try again.",
+			title: "Resource not found",
+			btnText: "Close"
+		},
+		"429": {
+			message: "xPlease wait and try again later.",
+			title: "Rate limit exceeded.",
+			btnText: "Close"
+		},
+		"500": {
+			message: "Please try again later.",
+			title: "Internal server error.",
+			btnText: "Close"
+		},
+		"503": {
+			message: "Please try again later.",
+			title: "Service unavailable.",
+			btnText: "Close"
+		},
+		"511": {
+			message: "Please use a different audio file.",
+			title: "Unsafe transcript detected",
+			btnText: "Close"
+		},
+		"200": {
+			message: "Null",
+			title: "Null",
+			btnText: "Null"
+		}
+
+	};
+	console.log(error)
+	return errorResponses[error]
+}
 </script>
 
 <!-- COMPONENT -->
@@ -184,8 +247,7 @@
 	type="error"
 	header={popupHeader}
 	mainText={popupMainText}
-	firstButtonText="Re-upload"
+	firstButtonText={popupButtonText}
 	firstHandleClick={dismissError}
 	width="96"
 />
-
