@@ -113,9 +113,7 @@
 			if($errorStore){
 				goto("/upload_audio");
 				// raise the error with the code in the errorStore
-				errorStore.subscribe((value) => {
-					raiseError(value.message)
-            	});
+				raiseError($errorStore)
 				resetStores();
 				return
 			}
@@ -139,7 +137,6 @@
 
 	// Function to trigger the appropriate error popup modal based on the error type
 	function raiseError(errorType) {
-		// Setting the popup modal properties based on the error type
 		const errorInfo = handle_error(errorType)
 		popupHeader = errorInfo.title;
 		popupMainText = errorInfo.message;
@@ -147,7 +144,6 @@
 
 		// Toggle the popup modal visibility
 		popUpModalComponent.togglePopUp();
-		
   	}
 
 	// Function to dismiss the error popup modal
@@ -195,6 +191,11 @@
 			message: "Please use a different audio file.",
 			title: "Unsafe transcript detected",
 			btnText: "Close"
+		},
+		"200": {
+			message: "Null",
+			title: "Null",
+			btnText: "Null"
 		}
 
 	};

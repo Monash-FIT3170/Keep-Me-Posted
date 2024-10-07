@@ -16,9 +16,7 @@ export let send_summary = async (transcript, baseURL) => {
         // Check if error occurred
         if (!response.ok) {
             // Update the error store with the associated error message
-            errorStore.set({
-                message: response.status
-            });
+            errorStore.set(response.status);
             return null;
         };
 
