@@ -28,7 +28,7 @@
 <div class="flex justify-center gap-2 px-4">
     <div class="relative">
       <input
-        class="border border-slate-300 pl-9 p-2 rounded-xl w-full sm:w-96"
+        class="border border-slate-300 pl-9 p-2 rounded-xl w-full sm:w-96 h-full"
         type="email"
         placeholder="johndoe@email.com"
         bind:value={emailString}
