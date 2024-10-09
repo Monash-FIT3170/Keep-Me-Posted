@@ -7,7 +7,7 @@
   import Button from "../components/button.svelte";
   import { getAuth, authStore, clearAuth } from "../stores/auth-store.js";
   import { goto } from "$app/navigation";
-  import { resetStores } from "../stores/reset-store.js";
+  import { resetStores, resetStoresOnHomeClick } from "../stores/reset-store.js";
 
   let showDropdown = false;
   let profileIcons = [profileIcon, profileHoverIcon];
@@ -41,7 +41,14 @@
 
   // Function to handle going to main page (NOT sign in if they are signed in already)
   function handleGoHome() {
-    console.log("todo - handle go to home");
+    console.log(email);
+    resetStoresOnHomeClick();
+    if (email == "") {
+      clearAuth();
+      goto("/login");
+    } else {
+      goto("/upload_audio")
+    }
   }
 
   // Function to handle navigating to sign in page
