@@ -19,6 +19,7 @@
   import { transcriptStore } from "../stores/transcript-store";
   import { send_summary } from "../api-functions/send_summary";
   import { backendURL } from "../api-functions/base-URL";
+    import { apiStatusStore } from "../stores/api-status-store";
 
   export let emailSubject = "";
   export let summaryGenerated = "";
@@ -99,23 +100,47 @@
   //     displayPopUp = !displayPopUp;
   // }
 
+  let regenerateBtn;
   let popUpModalComponent;
+
+  function cancelRegenerate() {
+    apiStatusStore.set("Cancel");
+    popUpModalComponent.togglePopUp();
+    regenerateBtn.toggleDisabled();
+  };
 
   function openRegeneratePopUp() {
     // Assuming you have the transcript available, if not, you need to pass it to the function
     popUpModalComponent.togglePopUp();
     popUpModalComponent.animateProgress();
+    
+    // Log the current transcript
+    let currentSubject = emailSubject;
+    let currentSummary = summaryGenerated;
+
     // Call the backend function to regenerate the summary and subject
     send_summary($transcriptStore.transcript, backendURL)
       .then((response) => {
+
         emailSubject = $summaryStore.subject;
         summaryGenerated = $summaryStore.summary;
+
+        if ($apiStatusStore == 'Cancel') {
+          console.log("Regenerate cancelled");
+          emailSubject = currentSubject;
+          summaryGenerated = currentSummary;
+          saveSummaryToStore();
+          apiStatusStore.set('')
+          regenerateBtn.toggleDisabled();
+          return;
+        };
 
         console.log("Summary and subject successfully updated from backend.");
         if (popUpModalComponent.getVisible() == true) {
           popUpModalComponent.togglePopUp();
           popUpModalComponent.resetProgress();
         }
+
       })
       .catch((error) => {
         console.error("Failed to regenerate summary and subject:", error);
@@ -131,6 +156,7 @@
   {#if summaryGenerated && emailSubject}
     <div class="flex justify-end ml-auto">
       <Button
+        bind:this={regenerateBtn}
         handleClick={openRegeneratePopUp}
         type="secondary-with-border"
         text="Regenerate"
@@ -193,6 +219,7 @@
   header="Regenerating..."
   mainText=""
   type="loading"
-  firstHandleClick={openRegeneratePopUp}
+  firstButtonText="Cancel"
+  firstHandleClick={cancelRegenerate}
   width="96"
 />

@@ -19,12 +19,22 @@
     export let minHeight = 11;
     export let fitContainerHeight = false; // New prop to fit container height
     export let disabled = false;
+    let originalType = type;
 
 
     // Internal handleClick function that calls the passed handleClick prop
     function internalHandleClick() {
         handleClick();
     }
+
+    export function toggleDisabled() {
+        if (type == 'disabled') {
+            type = originalType;
+        } else {
+            type = 'disabled';
+        }
+    }
+
 </script>
 
 <div class="flex justify-center sm:justify-start h-full">

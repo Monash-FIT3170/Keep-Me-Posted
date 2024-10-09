@@ -12,6 +12,7 @@
   import Button from "./button.svelte";
   import errorIcon from "../assets/error-icon.png";
   import { Progressbar } from "flowbite-svelte";
+  import { apiStatusStore } from "../stores/api-status-store";
 
   export let type = "primary"; // Default type is primary (blue with 1 button)
   export let firstHandleClick = () => {}; // Click function for primary button (dark blue, or red)
@@ -45,6 +46,11 @@
   export function animateProgress() {
     const speed = 1; // Speed of animation
     if (progress < targetProgress) {
+      if ($apiStatusStore == 'Cancel') {
+        console.log("Progress reset");
+        resetProgress();
+        return;
+      };
       progress += speed;
       if (progress >= targetProgress) {
         progress = targetProgress;
@@ -96,7 +102,7 @@
               </div>
               <Button
                 type="primary"
-                text="Close"
+                text={firstButtonText}
                 fullWidth={true}
                 handleClick={firstHandleClick}
               />
