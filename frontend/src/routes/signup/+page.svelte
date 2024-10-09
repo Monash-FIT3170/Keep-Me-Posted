@@ -207,7 +207,7 @@
 
           <InputFieldWithValidation
             label="Password"
-            isPasswordType={true}
+            isSignUpPasswordType={true}
             placeholder="••••••••"
             bind:value={password}
             validationMessage={passwordValidationString}
@@ -217,7 +217,7 @@
 
           <InputFieldWithValidation
             label="Verify Password"
-            isPasswordType={true}
+            isSignUpPasswordType={true}
             placeholder="••••••••"
             bind:value={verifyPassword}
             validationMessage={verifyPasswordValidationString}

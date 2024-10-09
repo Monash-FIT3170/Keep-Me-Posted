@@ -16,7 +16,8 @@
   export let validationMessage = "";
   export let showValidation = false; // Default false state
   export let validationActive = false; // Default false state
-  export let isPasswordType = false;
+  export let isLoginPasswordType = false;
+  export let isSignUpPasswordType = false;
   export let onInput;
   export let isWithIcon = false; // allows for icon padding
   let showPassword = false;
@@ -31,7 +32,7 @@
 
 <div id="login-form-container" class="mb-4">
   <label class="block text-gray-700 text-sm mb-1">{label}</label>
-  {#if isPasswordType}
+  {#if isLoginPasswordType}
     <div class="relative">
       {#if showPassword}
         <!-- Show password -->
@@ -68,6 +69,15 @@
         {/if}
       </button>
     </div>
+  {:else if isSignUpPasswordType}
+    <input
+      type="password"
+      bind:value
+      {placeholder}
+      on:input={handleInput}
+      class="border-gray-300 rounded-lg w-full py-3 px-3 text-gray-700 text-sm placeholder:text-sm leading-tight focus:outline-none focus:shadow-outline"
+      style="border-radius: 8px; border-width: 1px;"
+    />
   {:else if isWithIcon}
     <input
       type="text"
