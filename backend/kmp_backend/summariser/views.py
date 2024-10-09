@@ -10,14 +10,14 @@ from googleapiclient.errors import HttpError
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Create your views here.
+# Create your views here.W
 
 def generate_title_and_summary(transcript):
     """Generates a title and summary for the meeting transcript."""
     
     # No transcript provided
     if not transcript.strip():
-        return None, "No summary can be generated without a transcript."
+        return None, "No summary can be generated without a transcript.", True
 
     # Title generation prompt
     title_prompt = (
@@ -61,43 +61,47 @@ def generate_title_and_summary(transcript):
         # Check for prompt feedback in title generation
         title_feedback = title_response.prompt_feedback
         if title_feedback and "block_reason" in title_feedback:
-            return None, None
+            return None, None, False
 
         # Check for prompt feedback in summary generation
         summary_feedback = summary_response.prompt_feedback
         if summary_feedback and "block_reason" in summary_feedback:
-            return None, None
+            return None, None, False
 
         # Extract and return title and summary
         title = title_response.text.strip()
         summary = summary_response.text.strip()
 
-        return title, summary
+        return title, summary, True
     except HttpError as error:
         return handle_api_error(error)
 
 
 def generate_summary(request):
     """Handles the request to generate or regenerate the meeting summary and title."""
-    transcript = request.POST.get("transcript")
-    if transcript == "" or transcript is None:
-        return HttpResponse("Transcript not found", status=404)
+    try:
+        transcript = request.POST.get("transcript")
+        if transcript == "" or transcript is None:
+            return HttpResponse("Transcript not found", status=404)
 
-    title, summary = generate_title_and_summary(transcript)
+        title, summary, isSafe = generate_title_and_summary(transcript)
+        #if an HttpResonse is given, return that HttpResponse
+        if isinstance(summary, HttpResponse):
+            return summary
+        
+        if title is None or summary is None:
+            if not isSafe:
+                return HttpResponse("Unsafe transcript provided", status=511)
+            return HttpResponse("Unexpected Error Occurred", status=400)
 
-    #if an HttpResonse is given, return that HttpResponse
-    if isinstance(summary, HttpResponse):
-        return summary
-    
-    if title is None or summary is None:
-        return HttpResponse("Unsafe transcript provided", status=400)
+        response_data = {
+            "title": title,
+            "summary": summary
+        }
+        return JsonResponse(response_data, status=200)
+    except HttpError as error:
 
-    response_data = {
-        "title": title,
-        "summary": summary
-    }
-
-    return JsonResponse(response_data, status=200)
+        return handle_api_error(error)
 
 def handle_api_error(error):
     """Handles any error codes that Gemini may return."""
@@ -110,4 +114,4 @@ def handle_api_error(error):
         503: HttpResponse("Service unavailable. Please try again later.", status=503),
     }
     #return the error, if the error is not in the list of error responses, return a generic response
-    return error.status_code,error_responses.get(error.status_code, HttpResponse("An unexpected error occurred. Please try again later.", status=500))
+    return error.status_code,error_responses.get(error.status_code, HttpResponse("An unexpected error occurred. Please try again later.", status=500)),True

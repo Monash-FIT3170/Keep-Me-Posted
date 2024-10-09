@@ -6,7 +6,6 @@
     Last Modified: 5/08/2024
 -->
 <script>
-   import { onMount } from "svelte";
    import { goto } from "$app/navigation";
    import { updateAuth, clearAuth } from "../../stores/auth-store.js";
    import Logo from "../../components/logo.svelte";
@@ -114,10 +113,7 @@
       }
    }
 
-   // Optional: Fetch initial data or perform other tasks on component mount
-   onMount(async () => {
-      // Fetch initial data or perform other async tasks here
-   });
+   
 
    async function postData(loginData) {
       try {

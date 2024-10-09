@@ -67,9 +67,9 @@ Django is used for the backend. Django is a high-level Python web framework that
 3. Add the IDs to the **.env.local file** in the following format (without the curly brackets):
 
     ```
-    SECRET_CLIENT_ID={insert ID here}
+    VITE_SECRET_CLIENT_ID={insert ID here}
 
-    SECRET_CLIENT_SECRET={insert ID here}
+    VITE_SECRET_CLIENT_SECRET={insert ID here}
     ```
 
 ## AssemblyAI

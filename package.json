@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "svelte-file-dropzone": "^2.0.7"
-  },
-  "devDependencies": {
-    "cypress": "^13.13.3"
-  }
-}
