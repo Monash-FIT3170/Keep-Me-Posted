@@ -200,7 +200,7 @@
                   <div id="password-input">
                      <InputFieldWithValidation
                         label="Password"
-                        isPasswordType={true}
+                        isLoginPasswordType={true}
                         placeholder="••••••••"
                         bind:value={password}
                         validationMessage={passwordValidationString}
