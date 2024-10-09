@@ -59,7 +59,7 @@
 </script>
 
 <body>
-  <div class="">
+  <div class="z-50 fixed">
     <PopUpModal
     bind:this={popUpModalComponent}
     type="secondary"

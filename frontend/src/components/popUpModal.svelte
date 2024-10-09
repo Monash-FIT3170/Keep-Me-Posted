@@ -64,7 +64,7 @@
 <body>
   {#if visible}
     <div
-      class="justify-center items-center font-sans h-fulltransition ease-in-out duration-300"
+      class="justify-center items-center font-sans h-fulltransition ease-in-out duration-300 z-50"
     >
       <div
         class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
