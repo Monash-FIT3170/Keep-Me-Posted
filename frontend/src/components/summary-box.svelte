@@ -13,13 +13,14 @@
   import { summaryStore } from "../stores/summary-store";
   import { onMount } from "svelte";
   import regenerateIcon from "../assets/regenerate-icon.png";
+  import regenerateIconDisabled from "../assets/regenerate-icon-disabled.png";
   import PopUpModal from "./popUpModal.svelte";
   import { marked } from "marked";
   import TurndownService from "turndown";
   import { transcriptStore } from "../stores/transcript-store";
   import { send_summary } from "../api-functions/send_summary";
   import { backendURL } from "../api-functions/base-URL";
-    import { apiStatusStore } from "../stores/api-status-store";
+  import { apiStatusStore } from "../stores/api-status-store";
 
   export let emailSubject = "";
   export let summaryGenerated = "";
@@ -107,6 +108,7 @@
     apiStatusStore.set("Cancel");
     popUpModalComponent.togglePopUp();
     regenerateBtn.toggleDisabled();
+    regenerateBtn.replaceIcon(regenerateIconDisabled);
   };
 
   function openRegeneratePopUp() {
@@ -132,6 +134,7 @@
           saveSummaryToStore();
           apiStatusStore.set('')
           regenerateBtn.toggleDisabled();
+          regenerateBtn.replaceIcon(regenerateIcon);
           return;
         };
 

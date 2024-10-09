@@ -35,6 +35,10 @@
         }
     }
 
+    export function replaceIcon(newIconPath) {
+        icon = newIconPath;
+    }
+
 </script>
 
 <div class="flex justify-center sm:justify-start h-full">
