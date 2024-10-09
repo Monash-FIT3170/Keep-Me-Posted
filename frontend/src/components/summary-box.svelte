@@ -113,6 +113,7 @@
 
   function openRegeneratePopUp() {
     // Assuming you have the transcript available, if not, you need to pass it to the function
+    popUpModalComponent.resetProgress();
     popUpModalComponent.togglePopUp();
     popUpModalComponent.animateProgress();
     
