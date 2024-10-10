@@ -23,6 +23,13 @@
       }, 3000);
     }
   };
+
+  function handleKeydown(event) {
+    if (event.key === "Enter") {
+      addEmail();
+    }
+  }
+
 </script>
 
 <div class="flex justify-center gap-2 px-4">
@@ -32,6 +39,7 @@
         type="email"
         placeholder="johndoe@email.com"
         bind:value={emailString}
+        on:keydown={handleKeydown}
       />
       <button
             class="absolute cursor-default h-5 w-5 left-3 top-3 py-2 flex items-center bg-white"

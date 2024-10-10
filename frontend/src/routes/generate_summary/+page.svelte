@@ -14,7 +14,8 @@
   import { summaryStore } from "../../stores/summary-store";
   import ArrowLeft from "../../assets/arrow-left.png"
   import ArrowRight from "../../assets/arrow-right.png"
-  
+  import PopUpModal from "../../components/popUpModal.svelte";
+
   export let title = "Your Summary is Being Generated...";
   export let subTitle = "We are still generating your summary...";
   let summaryBoxRef;
@@ -49,6 +50,7 @@
       subTitle = "We are still generating your summary...";
     }
   }
+  
 </script>
 
 <body>

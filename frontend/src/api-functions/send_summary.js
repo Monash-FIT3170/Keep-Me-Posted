@@ -12,19 +12,11 @@ export let send_summary = async (transcript, baseURL) => {
 
     try {
         const response = await fetch(postRequestString, { method: "POST", body: data });
-
+        
         // Check if error occurred
         if (!response.ok) {
-            console.log(response.status);
-            // Retrieve error
-            const errorResponse = await response.json();
-
-            console.log(errorResponse.message);
-            
             // Update the error store with the associated error message
-            errorStore.set({
-                message: errorResponse.message
-            });
+            errorStore.set(response.status);
             return null;
         };
 
