@@ -1,6 +1,4 @@
-// src/stores/meetingsStore.js
-
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 
 // Key to retrieve the auth store from sessionStorage
 const AUTH_STORAGE_KEY = 'authStore';
@@ -89,3 +87,18 @@ export const deleteMeeting = (meetingId) => {
         return updatedMeetings;
     });
 };
+
+// Helper function to get meetings from the store itself
+export function getMeetingsFromStore() {
+    return get(meetings); // Retrieve the current meetings from the store
+}
+
+
+
+
+// import { getMeetingsFromStore } from '../../stores/past-meetings-store';
+
+//     // Get the current meetings from the store
+// let currentMeetings = getMeetingsFromStore();
+
+// console.log('Current meetings:', currentMeetings);

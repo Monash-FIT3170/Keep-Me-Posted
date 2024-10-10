@@ -14,7 +14,7 @@
   import { summaryStore } from "../../stores/summary-store";
   import ArrowLeft from "../../assets/arrow-left.png"
   import ArrowRight from "../../assets/arrow-right.png"
-
+  
   export let title = "Your Summary is Being Generated...";
   export let subTitle = "We are still generating your summary...";
   let summaryBoxRef;
