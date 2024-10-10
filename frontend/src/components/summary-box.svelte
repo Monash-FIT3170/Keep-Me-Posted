@@ -13,12 +13,14 @@
   import { summaryStore } from "../stores/summary-store";
   import { onMount } from "svelte";
   import regenerateIcon from "../assets/regenerate-icon.png";
+  import regenerateIconDisabled from "../assets/regenerate-icon-disabled.png";
   import PopUpModal from "./popUpModal.svelte";
   import { marked } from "marked";
   import TurndownService from "turndown";
   import { transcriptStore } from "../stores/transcript-store";
   import { send_summary } from "../api-functions/send_summary";
   import { backendURL } from "../api-functions/base-URL";
+  import { apiStatusStore } from "../stores/api-status-store";
 
   export let emailSubject = "";
   export let summaryGenerated = "";
@@ -99,23 +101,50 @@
   //     displayPopUp = !displayPopUp;
   // }
 
+  let regenerateBtn;
   let popUpModalComponent;
+
+  function cancelRegenerate() {
+    apiStatusStore.set("Cancel");
+    popUpModalComponent.togglePopUp();
+    regenerateBtn.toggleDisabled();
+    regenerateBtn.replaceIcon(regenerateIconDisabled);
+  };
 
   function openRegeneratePopUp() {
     // Assuming you have the transcript available, if not, you need to pass it to the function
+    popUpModalComponent.resetProgress();
     popUpModalComponent.togglePopUp();
     popUpModalComponent.animateProgress();
+    
+    // Log the current transcript
+    let currentSubject = emailSubject;
+    let currentSummary = summaryGenerated;
+
     // Call the backend function to regenerate the summary and subject
     send_summary($transcriptStore.transcript, backendURL)
       .then((response) => {
+
         emailSubject = $summaryStore.subject;
         summaryGenerated = $summaryStore.summary;
+
+        if ($apiStatusStore == 'Cancel') {
+          console.log("Regenerate cancelled");
+          emailSubject = currentSubject;
+          summaryGenerated = currentSummary;
+          saveSummaryToStore();
+          apiStatusStore.set('')
+          regenerateBtn.toggleDisabled();
+          regenerateBtn.replaceIcon(regenerateIcon);
+          return;
+        };
 
         console.log("Summary and subject successfully updated from backend.");
         if (popUpModalComponent.getVisible() == true) {
           popUpModalComponent.togglePopUp();
           popUpModalComponent.resetProgress();
         }
+
       })
       .catch((error) => {
         console.error("Failed to regenerate summary and subject:", error);
@@ -127,72 +156,78 @@
   }
 </script>
 
-<div class="rounded-lg p-4 w-11/12 sm:w-9/12 mx-auto" style="background-color: #F5FAFF;">
-  {#if summaryGenerated && emailSubject}
-    <div class="flex justify-end ml-auto">
-      <Button
-        handleClick={openRegeneratePopUp}
-        type="secondary-with-border"
-        text="Regenerate"
-        icon={regenerateIcon}
-        minHeight="8"
-      ></Button>
-    </div>
-  {/if}
-  <div class="flex flex-col gap-0 mb-4">
-    <label
-      class="block text-dark font-semibold pl-2 text-lg mb-2"
-      style="color:#667085"
-      for="emailSubject"
-    >
-      Email Subject
-    </label>
-    {#if emailSubject}
-      <input
-        class="w-full p-2 rounded border-[#D1E3F0] bg-[#F5FAFF]"
-        style=""
-        type="text"
-        id="emailSubject"
-        bind:value={emailSubject}
-        placeholder="Your subject will be generated here..."
-      />
-    {:else}
-      <div class="w-full p-2 rounded text-slate-400 font-bold">
-        Your subject will be generated here{dots}
-      </div>
-    {/if}
+<div>
+  <div class="z-50 fixed">
+    <PopUpModal
+      bind:this={popUpModalComponent}
+      header="Regenerating..."
+      mainText=""
+      type="loading"
+      firstButtonText="Cancel"
+      firstHandleClick={cancelRegenerate}
+      width="96"
+    />
   </div>
-  <div class="flex flex-col gap-0 mb-4">
-    <label
-      class="lock text-dark font-semibold pl-2 text-lg mb-2"
-      style="color:#667085"
-      for="summaryGenerated"
-    >
-      Summary
-    </label>
-    {#if summaryGenerated}
-      <div
-        class="w-full p-2 rounded text-base border border-[#D1E3F0] bg-[#F5FAFF] focus-within:border-blue-500 focus-within:border-2 focus-within:p-1.5 outline-none"
-        style=""
-        id="summaryGenerated"
-        contenteditable=""
-        placeholder="Your summary will be generated here..."
-      >
-        {@html marked(summaryGenerated)}
-      </div>
-    {:else}
-      <div class="w-full p-2 rounded text-slate-400 text-base">
-        Your subject will be generated here{dots}
+
+  <div class="rounded-lg p-4 w-11/12 sm:w-9/12 mx-auto" style="background-color: #F5FAFF;">
+    {#if summaryGenerated && emailSubject}
+      <div class="flex justify-end ml-auto">
+        <Button
+          bind:this={regenerateBtn}
+          handleClick={openRegeneratePopUp}
+          type="secondary-with-border"
+          text="Regenerate"
+          icon={regenerateIcon}
+          minHeight="8"
+        ></Button>
       </div>
     {/if}
+    <div class="flex flex-col gap-0 mb-4">
+      <label
+        class="block text-dark font-semibold pl-2 text-lg mb-2"
+        style="color:#667085"
+        for="emailSubject"
+      >
+        Email Subject
+      </label>
+      {#if emailSubject}
+        <input
+          class="w-full p-2 rounded border-[#D1E3F0] bg-[#F5FAFF]"
+          style=""
+          type="text"
+          id="emailSubject"
+          bind:value={emailSubject}
+          placeholder="Your subject will be generated here..."
+        />
+      {:else}
+        <div class="w-full p-2 rounded text-slate-400 font-bold">
+          Your subject will be generated here{dots}
+        </div>
+      {/if}
+    </div>
+    <div class="flex flex-col gap-0 mb-4">
+      <label
+        class="lock text-dark font-semibold pl-2 text-lg mb-2"
+        style="color:#667085"
+        for="summaryGenerated"
+      >
+        Summary
+      </label>
+      {#if summaryGenerated}
+        <div
+          class="w-full p-2 rounded text-base border border-[#D1E3F0] bg-[#F5FAFF] focus-within:border-blue-500 focus-within:border-2 focus-within:p-1.5 outline-none"
+          style=""
+          id="summaryGenerated"
+          contenteditable=""
+          placeholder="Your summary will be generated here..."
+        >
+          {@html marked(summaryGenerated)}
+        </div>
+      {:else}
+        <div class="w-full p-2 rounded text-slate-400 text-base">
+          Your subject will be generated here{dots}
+        </div>
+      {/if}
+    </div>
   </div>
 </div>
-
-<PopUpModal
-  bind:this={popUpModalComponent}
-  header="Regenerating..."
-  mainText=""
-  type="loading"
-  firstHandleClick={openRegeneratePopUp}
-  width="96"
-/>
