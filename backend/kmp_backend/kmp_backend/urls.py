@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('emailing.urls')),
     # Add URL pattern for serving audio files
     path('', include('summariser.urls')),
+    path('meetings/', include('meetings.urls')),
 ]
 
 

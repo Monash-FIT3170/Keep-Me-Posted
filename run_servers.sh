@@ -15,4 +15,4 @@ osascript -e 'tell application "Terminal" to do script "cd '$DIR'/frontend && np
 
 # Function to start backend server
 echo "Starting backend server..."
-osascript -e 'tell application "Terminal" to do script "cd '$DIR'/backend && [ ! -d venv ] && python3 -m venv venv; source venv/bin/activate && pip install -r requirements.txt && cd kmp_backend && python manage.py makemigrations && python manage.py migrate && python manage.py runserver"'
+osascript -e 'tell application "Terminal" to do script "cd '$DIR'/backend && [ ! -d venv ] && python3 -m venv venv; source venv/bin/activate && pip install -r requirements.txt && cd kmp_backend && python manage.py makemigrations meetings && python manage.py migrate && python manage.py runserver"'
