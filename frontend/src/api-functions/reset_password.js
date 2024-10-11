@@ -1,4 +1,3 @@
-import { ResetPasswordStore } from "../stores/reset-password-store"
 
 export let reset_password = async (uid, token, password, baseURL) => {
     const postRequestString = baseURL + "/reset_password" 
