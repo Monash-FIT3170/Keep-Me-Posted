@@ -34,12 +34,12 @@ def send_password_reset(request):
         email = MIMEMultipart("alternative")
         email["Subject"] = "KMP Password Reset"
         email["From"] = os.getenv("SMTP_EMAIL")
-        email["To"] = request.POST.get("uid")
-        
+        email["To"] = request.POST.get("email")
+                        
         uid = urlsafe_base64_encode(force_bytes(user.id))
         token_generator = PasswordResetTokenGenerator()
         token = urlsafe_base64_encode(force_bytes(token_generator.make_token(user=user)))
-        reset_link = settings.FRONTEND_URL + f"/reset_password/{uid}/{token}"
+        reset_link =  request.POST.get("frontendURL") + f"reset_password/{uid}/{token}"
         
         message = f"""
 Hello,
