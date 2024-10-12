@@ -13,10 +13,10 @@
   let message = "";
   let email = "";
 
-//   let requestPasswordReset = async () => {
-//       await request_reset_password(email, backendURL, frontendURL)
-//       message = "If you have an existing account, a reset link will be sent to you."
-//   }
+   let requestPasswordReset = async () => {
+   await request_reset_password(email, backendURL, frontendURL)
+   message = "If you have an existing account, a reset link will be sent to you."
+}
 
   let googleIcon = `<svg
               xmlns="http://www.w3.org/2000/svg"
@@ -105,6 +105,7 @@ Make this pretty :)
                 fitContainerHeight={true}
                 type="primary"
                 text="Send Link"
+                handleClick={request_reset_password}
               />
             </div>
           </div>
