@@ -11,13 +11,25 @@
     import { onMount } from "svelte";
     import ArrowRight from "../../assets/arrow-right.png"
     import SummaryBox from "../../components/summary-box.svelte";
+    import ResendSummaryBox from "../../components/resendSummaryBox.svelte"
     import SendRecipients from "../../components/sendRecipientsList.svelte";
     import Toggle from "../../components/toggle.svelte"; 
+    import { page } from '$app/stores';
+    import { summaryStore } from "../../stores/resend-store";
 
     let summaryBoxRef;
     let sendRecipientsRef;
     let toggleRef; 
-  
+    let subject = '';
+    let transcript = '';
+    $: {
+      const urlParams = new URLSearchParams($page.url.search);
+      subject = urlParams.get('subject') || ''; // Default to empty string if null
+      transcript = urlParams.get('transcript') || ''; // Default to empty string if null
+      // Update the store
+      summaryStore.set({ subject, transcript });
+    }
+
     onMount(() => {
       if ($authStore["loggedIn"] == true) {
         ContactsStore.update((prev) => {
@@ -30,7 +42,6 @@
       }
     })
   
-    
     let nextPage = () => {
       if ($authStore.email.length == 0 && !($isCancelled)) {
         isOpen.set(true)
@@ -43,9 +54,6 @@
       goto("/profile")
     };
   </script>
-  
-  
-  
   
   <div class="{$isOpen ? "opacity-50" : ""}">
     <Topbar></Topbar>
@@ -68,7 +76,7 @@
     </div>
 
     <div>
-      <SummaryBox bind:this={summaryBoxRef} />
+      <ResendSummaryBox emailSubject={subject} summaryGenerated={transcript} />
     </div>
   
     <div style="margin-left: 1100px; margin-top:10px">
@@ -82,9 +90,6 @@
       ></Button>
 
     </div>
-
-    
-
     
   </div>
   

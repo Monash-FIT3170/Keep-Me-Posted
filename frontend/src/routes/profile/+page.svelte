@@ -15,7 +15,6 @@
     console.log('Current meetings:', currentMeetings);
     function convertDate(isoDate) {
       const date = new Date(isoDate);
-      
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0'); 
       const year = date.getFullYear();
@@ -37,10 +36,12 @@
     {#each currentMeetings as meeting}
       <Card
         subject={meeting.meeting_subject}
-        transcript={meeting.meeting_transcript}
+        summary={meeting.meeting_summary}
         date={convertDate(meeting.meeting_date)}
       />
     {/each}
   </div>
   </body>
+
+
   

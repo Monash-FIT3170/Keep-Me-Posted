@@ -2,24 +2,27 @@
   import { Card } from 'flowbite-svelte';
   import Regenerate from "../assets/regenerate-icon.png";
   import { goto } from "$app/navigation";
+  import { marked } from 'marked';
 
   export let subject = "Summary History";
-  export let transcript = "Default summary text goes here.";
+  export let summary = "Default summary text goes here.";
   export let date = "dd/mm/yyyy";
 
   // Function to handle navigating to the specified page
   function handleResend() {
-    goto("/resend_summary"); 
-  }
+    const encodedSubject = encodeURIComponent(subject);
+    const encodedTranscript = encodeURIComponent(summary);
+    goto(`/resend_summary?subject=${encodedSubject}&transcript=${encodedTranscript}`);
+}
 </script>
 
-<Card>
+<Card class="cursor-pointer" on:click={handleResend} >
   <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
     {subject}
   </h5>
   
   <p class="mb-3 font-normal text-gray-700 dark:text-gray-500 overflow-hidden text-ellipsis line-clamp-3">
-    {transcript}
+    {@html marked.parse(summary)}
   </p>
 
   <div class="flex items-center justify-between text-primary-600">
