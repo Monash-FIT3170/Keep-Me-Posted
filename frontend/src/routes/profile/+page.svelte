@@ -9,6 +9,21 @@
 <script>
     import Card from "../../components/summaryCard.svelte";
     import Topbar from "../../components/topbar.svelte";
+    import { getMeetingsFromStore } from "../../stores/past-meetings-store"
+
+    let currentMeetings = getMeetingsFromStore();
+    console.log('Current meetings:', currentMeetings);
+    function convertDate(isoDate) {
+      const date = new Date(isoDate);
+
+      // Get day, month, and year
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year = date.getFullYear();
+
+      // Return formatted date as dd/mm/yyyy
+      return `${day}/${month}/${year}`;
+  }
 </script>
   
   <body class="p-4 sm:p-8">
@@ -21,12 +36,13 @@
   </h2>
     <!-- Card Container Section -->
   <div class="flex flex-col sm:flex-row gap-4 flex-wrap justify-center">
-    <!-- First Card -->
-    <Card class="w-full sm:max-w-sm bg-white shadow-lg rounded-lg p-6" />
-    
-    <!-- Add more cards here -->
-    <Card class="w-full sm:max-w-sm bg-white shadow-lg rounded-lg p-6" />
-    <Card class="w-full sm:max-w-sm bg-white shadow-lg rounded-lg p-6" />
+    {#each currentMeetings as meeting}
+      <Card
+        subject={meeting.meeting_subject}
+        transcript={meeting.meeting_transcript}
+        date={convertDate(meeting.meeting_date)}
+      />
+    {/each}
   </div>
   </body>
   

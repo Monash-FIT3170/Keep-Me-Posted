@@ -130,30 +130,6 @@
                   </button>
                 </div>
                 <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
-                  <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={() => goto("/profile")} >
-                    <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
-                      <img class="h-4" src={historyIcon} alt="Summary History icon" />
-                      <div class="text-gray-700 text-base px-3">Summary History</div>
-                    </div>
-                  </button>
-                </div>
-                <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
-                  <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={() => goto("/profile")} >
-                    <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
-                      <img class="h-4" src={historyIcon} alt="Summary History icon" />
-                      <div class="text-gray-700 text-base px-3">Summary History</div>
-                    </div>
-                  </button>
-                </div>
-                <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
-                  <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={popUpModalComponent.togglePopUp()} >
-                    <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
-                      <img class="h-4" src={historyIcon} alt="Summary History icon" />
-                      <div class="text-gray-700 text-base px-3">Summary History</div>
-                    </div>
-                  </button>
-                </div>
-                <div class="flex w-full float-start items-start justify-start pt-3 pb-1 px-3">
                   <button class="hover:bg-gray-100 rounded-lg font-sans justify-center items-center flex w-full h-8" on:click={popUpModalComponent.togglePopUp()}>
                     <div class="justify-start items-center flex flex-row w-full ms-1 px-1">
                       <img class="h-4" src={logOutIcon} alt="Log Out Icon" />
