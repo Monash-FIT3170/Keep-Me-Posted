@@ -3,7 +3,8 @@
     Page that shows the summary generated
 
     Author: Brenda Dang, Diya Ramesh
-    Last Modified: 1/08/2024
+    Modified by: Parul Garg
+    Last Modified: 13/10/2024
 -->
 
 <script>
@@ -94,6 +95,7 @@
   </div>
 
   {#if $summaryStore.summary}
+  //changing the positioning of the buttons dynamically
   <div class={isScrolling ? "relative flex justify-between p-8": ""}>
     <div class={isScrolling ? "": "absolute bottom-8 left-8"}>
       <Button
