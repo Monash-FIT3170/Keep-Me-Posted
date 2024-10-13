@@ -1,4 +1,5 @@
 import { writable, get } from 'svelte/store';
+
 import { backendURL } from '../api-functions/base-URL';
 
 // Key to retrieve the auth store from sessionStorage
