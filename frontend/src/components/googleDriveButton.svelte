@@ -1,3 +1,14 @@
+<!-- Google Drive Button Component
+
+    Button component that allows users to upload audio files from Google Drive 
+    using the Google Picker API.
+
+    Author: Ahmed Almasry, Maureen Pham
+    Last modified: 13/10/2024
+
+-->
+
+
 <script>
     import { onMount } from "svelte";
     import Button from "./button.svelte";
