@@ -47,7 +47,7 @@
         
         let subject = $summaryStore.subject;
         let contacts = $ContactsStore
-        let transcript = $sendWithTranscriptStore ? $transcriptStore.transcript : null;
+        let transcript = $sendWithTranscriptStore ? $transcriptStore.transcriptWithSpeakers : null;
 
         let response = await send_email(transcript, summary, subject, contacts, backendURL);
         console.log(response)
