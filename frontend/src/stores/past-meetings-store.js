@@ -1,4 +1,5 @@
 import { writable, get } from 'svelte/store';
+import { backendURL } from '../api-functions/base-URL';
 
 // Key to retrieve the auth store from sessionStorage
 const AUTH_STORAGE_KEY = 'authStore';
@@ -48,7 +49,7 @@ export const fetchMeetings = async () => {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/meetings/${userEmail}/`);
+        const response = await fetch(`${backendURL}/meetings/${userEmail}/`);
         if (!response.ok) {
             throw new Error('Failed to fetch meetings');
         }
