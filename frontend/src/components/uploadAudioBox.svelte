@@ -27,7 +27,6 @@
 	import PopUpModal from "./popUpModal.svelte"; // Import the PopUpModal component
     import { resetStores } from "../stores/reset-store";
 	import { goto } from "$app/navigation";
-  	import { summaryStore } from "../stores/summary-store";
 	import { errorStore } from "../stores/error-store";
 	
   	import { onMount } from "svelte";
