@@ -1,12 +1,13 @@
 <script>
+
     import { reset_password} from '../../../../api-functions/reset_password';
     import { backendURL } from "../../../../api-functions/base-URL";
     import { goto } from "$app/navigation";
     import { page } from '$app/stores';
-    import LandingPageTitle from "../../components/landingPageTitle.svelte";
-    import InputFieldWithValidation from "../../components/input-field-with-validation.svelte";
-    import LoginCardHeader from "../../components/loginCardHeader.svelte";
-    import Button from "../../components/button.svelte";
+    import LandingPageTitle from "../../../../components/landingPageTitle.svelte";
+    import InputFieldWithValidation from "../../../../components/input-field-with-validation.svelte";
+    import LoginCardHeader from "../../../../components/loginCardHeader.svelte";
+    import Button from "../../../../components/button.svelte";
 
     $: uid = $page.params.uid;
     $: token = $page.params.token;
@@ -14,17 +15,22 @@
     let password1 = ""
     let password2 = ""
     let errorMessage = ""
+    let passwordValidationString = "";
+    let passwordValidationActive = false;
+
 
     let resetPassword = async () => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+,\-.;:'"<>=?\/\[\]{}|`~])(?=.{8,})[a-zA-Z0-9!@#$%^&*()_+,\-.;:'"<>=?\/\[\]{}|`~]*$/;
 
         if (!passwordRegex.test(password1)) {
             errorMessage = "Password must contain at least 8 characters, capital letters, and a special character";
+            console.log(errorMessage);
             return
         }
 
         if (password1 !== password2) {
             errorMessage = "Passwords do not match"
+            console.log(errorMessage);
             return
         }
 
@@ -32,11 +38,14 @@
         
         if (response.status === 200) {
             errorMessage = "Password successfully reset"
+            console.log(errorMessage);
+
             setTimeout(() => {
                 goto("/login")
             }, 1500)
         } else {
             errorMessage = "Password reset failed"
+            console.log(errorMessage);
         }
     }
 
@@ -47,17 +56,6 @@ TODO:
 Make this pretty :)
 -->
 
-<div class="flex flex-col">
-    <div>Enter your new password</div>
-    <input type="password" placeholder="••••••••" bind:value={ password1 }/>
-    <div>Re-enter your new password</div>
-    <input type="password" placeholder="••••••••" bind:value={ password2 }/>
-
-    <button on:click={() => resetPassword()}>Reset password</button>
-    {#if errorMessage}
-        <div>{errorMessage}</div>
-    {/if}
-</div>
 
 <div
   class="m-0 h-screen bg-gradient-to-l from-[#53b1fd] to-[#1570ef] flex justify-center items-center text-white"
@@ -103,6 +101,7 @@ Make this pretty :)
                    bind:value={password1}
                    validationMessage={passwordValidationString}
                    validationActive={passwordValidationActive}
+                  
                 />
              </div>
              <div id="password-input">
@@ -113,6 +112,7 @@ Make this pretty :)
                    bind:value={password2}
                    validationMessage={passwordValidationString}
                    validationActive={passwordValidationActive}
+                   
                 />
              </div>
              
@@ -122,7 +122,7 @@ Make this pretty :)
                 fitContainerHeight={true}
                 type="primary"
                 text="Reset Password"
-                handleClick={resetPassword()}
+                handleClick={resetPassword}
               />
             </div>
           </div>
