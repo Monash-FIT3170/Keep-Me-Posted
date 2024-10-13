@@ -3,6 +3,10 @@
     import { backendURL } from "../../../../api-functions/base-URL";
     import { goto } from "$app/navigation";
     import { page } from '$app/stores';
+    import LandingPageTitle from "../../components/landingPageTitle.svelte";
+    import InputFieldWithValidation from "../../components/input-field-with-validation.svelte";
+    import LoginCardHeader from "../../components/loginCardHeader.svelte";
+    import Button from "../../components/button.svelte";
 
     $: uid = $page.params.uid;
     $: token = $page.params.token;
