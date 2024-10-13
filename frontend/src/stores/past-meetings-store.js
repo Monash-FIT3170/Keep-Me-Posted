@@ -49,7 +49,7 @@ export const fetchMeetings = async () => {
     }
 
     try {
-        const response = await fetch(`${backendURL}/${userEmail}/`);
+        const response = await fetch(`https://keep-me-posted-server-2.onrender.com/meetings/${userEmail}/`);
         if (!response.ok) {
             throw new Error('Failed to fetch meetings');
         }
