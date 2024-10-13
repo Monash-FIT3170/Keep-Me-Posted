@@ -20,6 +20,8 @@
   export let isSignUpPasswordType = false;
   export let onInput;
   export let isWithIcon = false; // allows for icon padding
+  export let onKeydown; 
+  
   let showPassword = false;
 
   function handleInput(event) {
@@ -28,6 +30,13 @@
       onInput(value);
     }
   }
+
+  function handleKeydown(event) {
+    if (onKeydown) {
+      onKeydown(event); 
+    }
+  }
+
 </script>
 
 <div id="login-form-container" class="mb-4">
@@ -75,6 +84,7 @@
       bind:value
       {placeholder}
       on:input={handleInput}
+      on:keydown={handleKeydown}
       class="border-gray-300 rounded-lg w-full py-3 px-3 text-gray-700 text-sm placeholder:text-sm leading-tight focus:outline-none focus:shadow-outline"
       style="border-radius: 8px; border-width: 1px;"
     />
@@ -84,6 +94,7 @@
       bind:value
       {placeholder}
       on:input={handleInput}
+      on:keydown={handleKeydown}
       class="pl-10 border-gray-300 rounded-lg w-full py-3 px-3 text-gray-700 text-sm placeholder:text-sm leading-tight focus:outline-none focus:shadow-outline"
       style="border-radius: 8px; border-width: 1px;"
     />
@@ -93,6 +104,7 @@
       bind:value
       {placeholder}
       on:input={handleInput}
+      on:keydown={handleKeydown}
       class="border-gray-300 rounded-lg w-full py-3 px-3 text-gray-700 text-sm placeholder:text-sm leading-tight focus:outline-none focus:shadow-outline"
       style="border-radius: 8px; border-width: 1px;"
     />
