@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'kmp_backend.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://keep_me_posted_db2_user:4oEahf69CEwiJ31wX3ZvmvWnbfv9rjlV@dpg-cs5mt523esus73b16nb0-a/keep_me_posted_db2',
+        default='postgresql://keep_me_posted_db2_user:4oEahf69CEwiJ31wX3ZvmvWnbfv9rjlV@dpg-cs5mt523esus73b16nb0-a.singapore-postgres.render.com/keep_me_posted_db2',
         conn_max_age=600
     )
 }
