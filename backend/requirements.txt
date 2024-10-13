@@ -10,3 +10,8 @@ assemblyai
 markdown2
 reportlab==4.2.2
 PyPDF2==3.0.1
+dj-database-url  # Added this line
+psycopg2-binary
+whitenoise
+gunicorn  # Added Gunicorn
+uvicorn  # Added Uvicorn
