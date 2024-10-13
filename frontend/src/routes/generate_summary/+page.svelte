@@ -50,6 +50,20 @@
       subTitle = "We are still generating your summary...";
     }
   }
+
+  //changing the positioning of the buttons based on whether the user is scrolling or not
+  let isScrolling = false;
+  const whenScrolling = () => {
+    if (window.scrollY > 0){
+      isScrolling = true;
+    }
+    else{
+      isScrolling = false;
+    }
+  };
+
+  //adding the event listener
+  window.addEventListener("scroll", whenScrolling);
   
 </script>
 
@@ -73,7 +87,8 @@
   </div>
 
   {#if $summaryStore.summary}
-    <div class="absolute bottom-8 left-8">
+  <div class={isScrolling ? "relative flex justify-between p-8": ""}>
+    <div class={isScrolling ? "": "absolute bottom-8 left-8"}>
       <Button
         class="primary"
         text="Re-Upload Audio"
@@ -81,7 +96,7 @@
         handleClick={backBtn}
       />
     </div>
-    <div class="absolute bottom-8 right-8">
+    <div class={isScrolling ? "": "absolute bottom-8 right-8"}>
       <Button
         class="primary"
         text="Add Recipients"
@@ -90,6 +105,7 @@
         handleClick={forwardBtn}
       />
     </div>
+  </div>
   {:else}
     <div class="absolute bottom-8 left-8">
       <Button
