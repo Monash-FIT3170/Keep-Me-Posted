@@ -88,7 +88,7 @@
     async function pickerCallback(data) {
         if (data.action === google.picker.Action.PICKED) {
             loading = true; // Start showing the spinner
-            buttonText = "Retreiving file...";
+            buttonText = "Retrieving file...";
             buttonType = "disabled";
             try {
                 const document = data[google.picker.Response.DOCUMENTS][0];
