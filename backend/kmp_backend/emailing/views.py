@@ -27,6 +27,11 @@ def send_email(request):
     subject = request.POST.get('subject')  
     contacts = request.POST.get('contacts')
     transcript = request.POST.get('transcript')
+    user_email = request.POST.get('userEmail', 'Guest')  # Get the user's email or default to 'Guest'
+
+    # Extract only the part before the '@' symbol if it's not 'Guest'
+    if user_email != 'Guest':
+        user_email = user_email.split('@')[0]
 
     if not contacts:
         raise ValueError("Contacts list is empty.")
@@ -38,12 +43,17 @@ def send_email(request):
             email["From"] = username
             email["To"] = contact
 
+            # Use the user's email for the signature or 'Guest' if not logged in
+            signature = f"\n\nYours sincerely,\n{user_email}"
 
-            # Convert message into plain MIMEText object
-            part1 = MIMEText(message, "plain")
+            # Append the signature to the message
+            message_with_signature = message + signature
 
-            # Convert message into HTML MIMEText object
-            message_html = markdown2.markdown(message)
+            # Convert message into plain MIMEText object with signature
+            part1 = MIMEText(message_with_signature, "plain")
+
+            # Convert message into HTML MIMEText object with signature
+            message_html = markdown2.markdown(message_with_signature)
             part2 = MIMEText(message_html, "html")
         
 

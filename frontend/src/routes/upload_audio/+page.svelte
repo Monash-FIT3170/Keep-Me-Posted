@@ -4,15 +4,16 @@
 
     Author: Parul Garg (pgar0011)
     Edited By: Angelina Leung (aleu0007), Maureen Pham (mpha0039), Danny Leung (dleu0007), Rohit Valanki (rval0008)
-    Last Modified: 12/09/24
+    Last Modified: 1/10/2024 by Alex Ung
 
 -->
 
 <script>
-  //required imports
+  // Required imports
   import Button from "../../components/button.svelte";
   import Topbar from "../../components/topbar.svelte";
   import Toggle from "../../components/toggle.svelte";
+  import GoogleDriveButton from "../../components/googleDriveButton.svelte";
   import UploadBox from "../../components/uploadAudioBox.svelte";
   import { goto } from "$app/navigation";
   import { apiStatusStore } from "../../stores/api-status-store";
@@ -21,6 +22,8 @@
   import RightArrow from "../../assets/arrow-right.png";
   import { onMount, onDestroy } from "svelte";
   import { updateAuth, authStore } from "../../stores/auth-store.js";
+  import { fetchMeetings, meetings } from "../../stores/past-meetings-store"; // Import meetings store
+  import PopUpModal from "../../components/popUpModal.svelte";
 
   let loggedIn;
   let googleAuth = false;
@@ -32,6 +35,7 @@
   const unsubscribe = authStore.subscribe((value) => {
     loggedIn = value.loggedIn;
   });
+
   // Clean up the subscription when the component is destroyed
   onDestroy(() => {
     unsubscribe();
@@ -83,6 +87,20 @@
         );
       }
     }
+
+    // Fetch meetings for the user
+    fetchMeetings(userEmail);
+
+    // Log meetings when they are updated in the store
+    const unsubscribeMeetings = meetings.subscribe(meetingsList => {
+        console.log('Current Meetings:', meetingsList);
+    });
+
+    // Cleanup subscription for meetings when the component is destroyed
+    onDestroy(() => {
+        unsubscribeMeetings();
+    });
+
   });
 
   // Function to navigate to the summary page and update the status to "Viewed"
@@ -95,6 +113,15 @@
   function handleReUpload() {
     apiStatusStore.set("");
     resetStores();
+  }
+
+  let popUpModalComponent;
+  let errorMessage = "Something went wrong, please try again!";
+
+  function openPopUp() {
+    if (popUpModalComponent) {
+      popUpModalComponent.togglePopUp();
+    }
   }
 </script>
 
@@ -111,7 +138,9 @@
       Upload your meeting audio for us to summarise.
     </div>
 
-    <UploadBox />
+    <UploadBox popUpModal = {popUpModalComponent}/>
+
+    <GoogleDriveButton />
 
     <Toggle />
 
@@ -134,5 +163,14 @@
         type={$apiStatusStore == "" ? "disabled" : "primary"}
       ></Button>
     </div>
+      <PopUpModal 
+      bind:this={popUpModalComponent}
+      header="Oops..."
+      mainText={errorMessage}
+      type='error'
+      iconPath='../src/assets/error-icon.svg'
+      firstButtonText="Close"
+      firstHandleClick={openPopUp}
+    />
   </body>
 </html>

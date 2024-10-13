@@ -49,6 +49,13 @@
    let emailValidationActive = false;
    let passwordValidationActive = false;
 
+   function handleKeydown(event) {
+      console.log("Key pressed: ", event.key);
+      if (event.key === "Enter") {
+         handleSignIn(); 
+      }
+   }
+
    function isValidEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
@@ -209,6 +216,7 @@
                         bind:value={password}
                         validationMessage={passwordValidationString}
                         validationActive={passwordValidationActive}
+                        onKeydown={handleKeydown}
                      />
                   </div>
                   

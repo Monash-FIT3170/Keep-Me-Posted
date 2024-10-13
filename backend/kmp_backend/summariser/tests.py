@@ -65,13 +65,13 @@ class GenerateSummaryTests(TestCase):
     def test_transcript_with_swear_word(self, mock_model):
         """
         Test case: a transcript with inappropriate text.
-        Expect a 400 status code and a specific error message indicating unsafe content.
+        Expect a 511 status code and a specific error message indicating unsafe content.
         """
         mock_model_instance = mock_model.return_value
         mock_model_instance.generate_content.return_value = mock_response("This transcript contains inappropriate content.", {"block_reason": "Hate Speech"})
 
         response = self.client.post(self.url, {'transcript': 'This is a damn test transcript.'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 511)
         self.assertEqual(response.content.decode(), "Unsafe transcript provided")
 
     @patch('google.generativeai.GenerativeModel')
@@ -170,14 +170,14 @@ class GenerateSummaryTests(TestCase):
     def test_title_generation_failure(self, mock_model):
         """
         Test case: Title generation fails.
-        Expect a 400 status code and a specific error message indicating unsafe content.
+        Expect a 511 status code and a specific error message indicating unsafe content.
         """
         mock_model_instance = mock_model.return_value
         # Simulate a blocked response for the title generation
         mock_model_instance.generate_content.side_effect = [mock_response("Blocked Title", {"block_reason": "Unsafe content"}), mock_response("This is a valid summary.", {})]
 
         response = self.client.post(self.url, {'transcript': 'This is a test transcript.'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 511)
         self.assertEqual(response.content.decode(), "Unsafe transcript provided")
 
 

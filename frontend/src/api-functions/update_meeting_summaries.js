@@ -1,23 +1,18 @@
 // send email api function. 
 // message: String, subject: String, Contacts: [String]
 import { emailStatusStore } from "../stores/email-status-store"
-import { getAuth } from "../stores/auth-store"  // Import getAuth to retrieve user's email
 
-export let send_email = async (transcript, message, subject, contacts, baseURL) => {
-    const postRequestString = baseURL + "/api/sendemail" 
+
+export let update_meeting_summary = async (user_email, meeting_subject, meeting_transcript, meeting_summary, meeting_recipients, meeting_date, baseURL) => {
+    const postRequestString = baseURL + "/meetings/" 
 
     let data = new FormData()
-    data.append('message', message)
-    data.append('subject', subject)
-    data.append('contacts', contacts)
-    
-    // Get the logged-in user's email or default to "Guest" if not logged in
-    let userEmail = getAuth().email || "Guest";  // Add user's email to form data
-    data.append('userEmail', userEmail);  // Pass the user's email along with the request
-
-    if (transcript) {
-        data.append('transcript', transcript);
-    }
+    data.append('user_email', user_email)
+    data.append('meeting_subject', meeting_subject)
+    data.append('meeting_transcript', meeting_transcript)
+    data.append('meeting_summary', meeting_summary)
+    data.append('meeting_recipients', JSON.stringify(meeting_recipients))
+    data.append('meeting_date', meeting_date)
 
     try {
         const response = await fetch(postRequestString, { method: "POST", body: data})
@@ -36,8 +31,7 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
 
         const jsonResponse = await response.json()
 
-        console.log("email sent")
-        emailStatusStore.set("Sent")
+        console.log("meeting summary updated")
 
         return jsonResponse.details;
     } catch (error) {
