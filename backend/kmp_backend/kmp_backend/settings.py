@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'kmp_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'keep-me-posted-db2',
+        'NAME': 'keep_me_posted_db2',
         'USER': 'keep_me_posted_db2_user',
         'PASSWORD': '4oEahf69CEwiJ31wX3ZvmvWnbfv9rjlV',
         'HOST': 'dpg-cs5mt523esus73b16nb0-a',
