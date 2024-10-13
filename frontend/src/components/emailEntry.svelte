@@ -1,19 +1,26 @@
-<!-- Email box Component
 
-    Component for the email input field
+<!--
 
-    Modified by: Parul Garg
-    Last modified: 11/09/2024
+	Email Input Box and Add Recipients Button Component
+
+	consists of parts
+	1. the email input field along with the icon
+	2. the add recipients button
+
+	Authors: Harrison Lane
+	Editied by: Parul Garg, Angelina Leung, Maureen Pham
+	Last Modified: 9/10/24 by Parul Garg
 
 -->
 
 <script>
+  // necessary imports
   import Button from "../components/button.svelte";
   import { ContactsStore } from "../stores/contacts-store";
   import { authStore } from "../stores/auth-store";
   import AddIconBlue from "../assets/add-icon-blue.png";
   import { onMount } from "svelte";
-
+  import mailIcon from "../assets/mail.png"
   let emailString = "";
   let emailErrorString = "";
   let searchResults = [];
@@ -35,10 +42,14 @@
     // uncomment this to see dummy email data
   });
 
+  //logic to check and add the entered email
   let addEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // checking if entered email string is valid
     if (emailRegex.test(emailString)) {
+      // if valid, add the email to the contacts store
       ContactsStore.update((prev) => {
+        // handling duplicate email entries
         if (prev.includes(emailString)) {
           return prev;
         } else {
@@ -46,7 +57,9 @@
         }
       });
       emailString = "";
-    } else {
+    } 
+    // if email string is not valid
+    else {
       emailErrorString = "Please enter a valid email address.";
       setTimeout(() => {
         emailErrorString = "";
@@ -70,8 +83,16 @@
       inputFocused = false; // Delay to allow click on search results
     }, 100);
   };
+  
+  function handleKeydown(event) {
+    if (event.key === "Enter") {
+      addEmail();
+    }
+  }
+
 </script>
 
+<!-- Input box and the add recipients buttton -->
 <div class="flex justify-center gap-2 px-4">
   <div class="relative">
     <input

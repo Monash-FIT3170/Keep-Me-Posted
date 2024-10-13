@@ -35,6 +35,13 @@
       showEmailError = true;
     }
   };
+
+  function handleKeydown(event) {
+    if (event.key === "Enter") {
+      handleAddEmail();
+    }
+  }
+
 </script>
 
 {#if $isOpen}
@@ -59,6 +66,7 @@
                 bind:value={emailString}
                 validationMessage={emailErrorString}
                 validationActive={showEmailError}
+                onKeydown={handleKeydown}
                 />
                 <button
                     class="absolute cursor-default h-5 w-5 left-3 top-9 py-2 flex items-center bg-white"
