@@ -1,9 +1,5 @@
 <script>
-  import { goto } from "$app/navigation";
   import { request_reset_password } from "../../api-functions/request_reset_password";
-
-  import { request_reset_password } from "../../api-functions/request_reset_password";
-
   import Logo from "../../components/logo.svelte";
   import LandingPageTitle from "../../components/landingPageTitle.svelte";
   import InputFieldWithValidation from "../../components/input-field-with-validation.svelte";
