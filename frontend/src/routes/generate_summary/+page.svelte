@@ -73,14 +73,15 @@
   </div>
 
   {#if $summaryStore.summary}
-    <div class="relative flex justify-between p-8">
+    <div class="absolute bottom-8 left-8">
       <Button
         class="primary"
         text="Re-Upload Audio"
         icon={ArrowLeft}
         handleClick={backBtn}
       />
-
+    </div>
+    <div class="absolute bottom-8 right-8">
       <Button
         class="primary"
         text="Add Recipients"
