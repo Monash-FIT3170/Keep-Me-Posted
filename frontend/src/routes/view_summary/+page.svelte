@@ -2,7 +2,7 @@
     import Button from "../../components/button.svelte";
     import Topbar from "../../components/topbar.svelte";
     import EmailEntry from "../../components/emailEntry.svelte";
-    import EmailList from "../../components/emailList.svelte";
+    import ViewEmailList from "../../components/viewemaillist.svelte";
     import { goto } from "$app/navigation";
     import { ContactsStore } from "../../stores/contacts-store";
     import { authStore } from "../../stores/auth-store"
@@ -62,20 +62,15 @@
     <Topbar></Topbar>
     <div class="flex flex-col text-center">
       <div class="flex flex-col p-12 gap-4">
-        <h1>Resend Summary</h1>
-        <div class="subheading">
-          You can add or remove your previous recipients and resend your summary. 
-        </div>
-        <EmailEntry></EmailEntry>
+        <h1>View Summary</h1>
       </div>
     </div>
 
     <div class="flex flex-col text-center">
       <div class="flex flex-col text-center">
         <h6 style="color: grey">Previously sent to: </h6>
-        <EmailList></EmailList>
+        <ViewEmailList></ViewEmailList>
       </div>
-      <Toggle></Toggle>
     </div>
 
     <div>
@@ -83,15 +78,6 @@
     </div>
   
     <div style="margin-left: 1100px; margin-top:10px">
-      <Button
-        handleClick={nextPage}
-        icon={ArrowRight}
-        iconPos='right'
-        text="Resend Email"
-        disabled={$ContactsStore.length == 0 && $isCancelled == true}
-        type={($ContactsStore.length == 0 && $isCancelled == true) ? "disabled" : "primary"}
-      ></Button>
-
     </div>
     
   </div>
