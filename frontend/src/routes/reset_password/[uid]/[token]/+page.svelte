@@ -65,7 +65,6 @@ Make this pretty :)
         <div
           class=" ml-4 p-4 sm:p-6 md:p-0 mt-1 md:mt-0 min-w-[100%] md:min-w-[150px] ml-0 md:ml-40 h-full w-1/5 flex flex-col justify-end md:justify-end"
         >
-          <Logo class="mt-auto" />
         </div>
       </div>
       <div class="w-3/4 md:w-full md:flex-1 flex items-center md:items-start">
