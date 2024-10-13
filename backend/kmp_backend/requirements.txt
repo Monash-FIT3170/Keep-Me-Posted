@@ -10,3 +10,4 @@ assemblyai
 markdown2
 reportlab==4.2.2
 PyPDF2==3.0.1
+dj-database-url  # Added this line
