@@ -87,12 +87,19 @@ WSGI_APPLICATION = 'kmp_backend.wsgi.application'
 
 # Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://keep_me_posted_db2_user:4oEahf69CEwiJ31wX3ZvmvWnbfv9rjlV@dpg-cs5mt523esus73b16nb0-a.singapore-postgres.render.com/keep_me_posted_db2',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'keep-me-posted-db2',
+        'USER': 'keep_me_posted_db2_user',
+        'PASSWORD': '4oEahf69CEwiJ31wX3ZvmvWnbfv9rjlV',
+        'HOST': 'dpg-cs5mt523esus73b16nb0-a',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require'  # Ensure SSL is used
+        }
+    }
 }
+
 
 
 # Password validation
