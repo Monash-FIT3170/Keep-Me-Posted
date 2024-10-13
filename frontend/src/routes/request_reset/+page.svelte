@@ -1,7 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
-  import { request_reset_password} from '../../api-functions/request_reset_password';
- 
+  import { request_reset_password } from "../../api-functions/request_reset_password";
+
   import Logo from "../../components/logo.svelte";
   import LandingPageTitle from "../../components/landingPageTitle.svelte";
   import InputFieldWithValidation from "../../components/input-field-with-validation.svelte";
@@ -9,24 +9,37 @@
   import Button from "../../components/button.svelte";
   import { backendURL, frontendURL } from "../../api-functions/base-URL";
 
-
   let message = "";
   let email = "";
 
-   let requestPasswordReset = async () => {
-   await request_reset_password(email, backendURL, frontendURL)
-   message = "If you have an existing account, a reset link will be sent to you."
-}
+  let requestPasswordReset = async () => {
+    if (email == "") {
+      emailValidationString = "Please Enter Email";
+      emailValidationActive = true;
+      return false;
+    } 
+    else if (!isValidEmail(email)) {
+      emailValidationString = "Please Enter Valid Email";
+      emailValidationActive = true;
+      return false;
+    }
+    else
+    {
+      message ="If you have an existing account, a reset link will be sent to you.";
+      await request_reset_password(email, backendURL, frontendURL);
+    }
+  };
 
   let emailValidationString = "";
 
   let emailValidationActive = false;
+
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 </script>
 
-<!--
-TODO:
-Make this pretty :)
--->
 <div
   class="m-0 h-screen bg-gradient-to-l from-[#53b1fd] to-[#1570ef] flex justify-center items-center text-white"
 >
@@ -35,7 +48,7 @@ Make this pretty :)
     <div class="flex md:flex-col w-full md:w-1/2">
       <div class="ml-0 sm:ml-24 md:ml-0 w-1/4 md:w-full md:flex-1">
         <div
-          class=" ml-4 p-4 sm:p-6 md:p-0 mt-1 md:mt-0 min-w-[100%] md:min-w-[150px] ml-0 md:ml-40 h-full w-1/5 flex flex-col justify-end md:justify-end"
+          class="p-4 sm:p-6 md:p-0 mt-1 md:mt-0 min-w-[100%] md:min-w-[150px] ml-0 md:ml-40 h-full w-1/5 flex flex-col justify-end md:justify-end"
         >
           <Logo class="mt-auto" />
         </div>
@@ -50,7 +63,9 @@ Make this pretty :)
       </div>
     </div>
     <!-- Bottom Row on Mobile / Right Column on Desktop -->
-    <div class="w-full md:w-1/2 flex justify-center items-center h-full">
+    <div
+      class="w-full md:w-1/2 flex flex-col justify-center items-center h-full"
+    >
       <div
         class="h-full w-full md:w-full lg:w-2/3 flex justify-center items-center"
       >
@@ -81,6 +96,9 @@ Make this pretty :)
                 text="Send Link"
                 handleClick={requestPasswordReset}
               />
+            </div>
+            <div class="text-[#667085] text-sm font-inter font-[350] mb-6">
+              {message}
             </div>
           </div>
         </div>
