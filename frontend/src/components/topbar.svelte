@@ -60,7 +60,7 @@
 
   // Function to handle going to main page (NOT sign in if they are signed in already)
   function handleGoHome() {
-    console.log("todo - handle go to home");
+    goto("/upload_audio");
   }
 
   // Function to handle navigating to sign in page
