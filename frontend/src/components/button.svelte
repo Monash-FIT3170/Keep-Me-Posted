@@ -19,6 +19,7 @@
     export let minHeight = 11;
     export let fitContainerHeight = false; // New prop to fit container height
     export let disabled = false;
+    let originalType = type;
     export let loading = false;
 
 
@@ -26,6 +27,19 @@
     function internalHandleClick() {
         handleClick();
     }
+
+    export function toggleDisabled() {
+        if (type == 'disabled') {
+            type = originalType;
+        } else {
+            type = 'disabled';
+        }
+    }
+
+    export function replaceIcon(newIconPath) {
+        icon = newIconPath;
+    }
+
 </script>
 
 <div class="flex justify-center sm:justify-start h-full">

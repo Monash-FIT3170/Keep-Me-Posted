@@ -123,6 +123,7 @@
 			apiStatusStore.set("Complete");
 			if ($navStatusStore != "Skipped") {
 				goto("/generate_summary");
+				navStatusStore.set("")
 			};
 			navStatusStore.set("");
 			console.log('Summary Received');
