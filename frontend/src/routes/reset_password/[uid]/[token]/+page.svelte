@@ -85,7 +85,7 @@
           class="py-10 px-16 h-full md:h-3/4 lg:h-3/4 w-full sm:w-3/4 md:w-4/5 rounded-[16px] bg-white md:min-w-full lg:min-w-[450px] md:min-h-[635px] lg:min-h-[635px] ml-0 md:ml-16 mr-0 md:mr-16 max-h-[700px]"
         >
           <!-- Content here -->
-          {#if passwordResetSuccess}
+          {#if !passwordResetSuccess}
             <div class="w-full h-full">
               <LoginCardHeader
                 heading="Create New Password"
