@@ -19,6 +19,7 @@
     export let minHeight = 11;
     export let fitContainerHeight = false; // New prop to fit container height
     export let disabled = false;
+    export let loading = false;
 
 
     // Internal handleClick function that calls the passed handleClick prop
@@ -42,33 +43,40 @@
         on:click={internalHandleClick}
         disabled={disabled}>
 
-        {#if iconPos === 'right'}
+        {#if loading}
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-35" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
             {text}
-        {/if}
+        {:else}
+            {#if iconPos === 'right'}
+                {text}
+            {/if}
 
-        {#if icon}
+            {#if icon}
 
-            {#if text === ''}
+                {#if text === ''}
+                    <!-- svelte-ignore a11y-missing-attribute -->
+                    <img src="{icon}" class="max-w-4 md:max-w-5 lg:max-w-6"> <!-- no margin if only icon-->
+                {:else}
+                    <img src="{icon}" alt='icon' class="max-w-4 md:max-w-5 lg:max-w-6
+                    {iconPos === 'left' ? "mr-2" : ""}
+                    {iconPos === 'right' ? "ml-2" : ""}">
+                {/if}
+            {:else if iconSvg}
                 <!-- svelte-ignore a11y-missing-attribute -->
-                <img src="{icon}" class="max-w-4 md:max-w-5 lg:max-w-6"> <!-- no margin if only icon-->
-            {:else}
-                <img src="{icon}" alt='icon' class="max-w-4 md:max-w-5 lg:max-w-6
+                <div src="{icon}" class="sm:mr-2 lg:mr-6 2xl:mr-[2vw] max-w-6
                 {iconPos === 'left' ? "mr-2" : ""}
                 {iconPos === 'right' ? "ml-2" : ""}">
+                    {@html iconSvg}
+                </div>
             {/if}
-        {:else if iconSvg}
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <div src="{icon}" class="sm:mr-2 lg:mr-6 2xl:mr-[2vw] max-w-6
-            {iconPos === 'left' ? "mr-2" : ""}
-            {iconPos === 'right' ? "ml-2" : ""}">
-                {@html iconSvg}
-            </div>
-        {/if}
 
-        {#if iconPos === 'left'}
-            {text}
+            {#if iconPos === 'left'}
+                {text}
+            {/if}
         {/if}
-
         <slot>{altText}</slot> <!-- alternative text for if the button needs to be resized-->
     </button>
 </div>
