@@ -15,6 +15,7 @@
   import ArrowLeft from "../../assets/arrow-left.png"
   import ArrowRight from "../../assets/arrow-right.png"
   import PopUpModal from "../../components/popUpModal.svelte";
+  import { onMount } from "svelte";
 
   export let title = "Your Summary is Being Generated...";
   export let subTitle = "We are still generating your summary...";
@@ -62,8 +63,14 @@
     }
   };
 
-  //adding the event listener
-  window.addEventListener("scroll", whenScrolling);
+  //handling the event listener
+  onMount(() => {
+    window.addEventListener("scroll", whenScrolling);
+    return () => {
+      window.removeEventListener("scroll", whenScrolling);
+    };
+  });
+
   
 </script>
 
