@@ -1,0 +1,85 @@
+<script>
+    import Button from "../../components/button.svelte";
+    import Topbar from "../../components/topbar.svelte";
+    import EmailEntry from "../../components/emailEntry.svelte";
+    import ViewEmailList from "../../components/viewemaillist.svelte";
+    import { goto } from "$app/navigation";
+    import { ContactsStore } from "../../stores/contacts-store";
+    import { authStore } from "../../stores/auth-store"
+    import { isOpen, isCancelled} from "../../stores/user-email-popup-store";
+    import UserEmailEntry from "../../components/userEmailEntry.svelte";
+    import { onMount } from "svelte";
+    import ArrowRight from "../../assets/arrow-right.png"
+    import SummaryBox from "../../components/summary-box.svelte";
+    import ResendSummaryBox from "../../components/resendSummaryBox.svelte"
+    import SendRecipients from "../../components/sendRecipientsList.svelte";
+    import Toggle from "../../components/toggle.svelte"; 
+    import { page } from '$app/stores';
+    import { summaryStore } from "../../stores/resend-store";
+    import { send_email } from "../../api-functions/send_email";
+
+    let summaryBoxRef;
+    let sendRecipientsRef;
+    let toggleRef; 
+    let subject = '';
+    let transcript = '';
+    $: {
+      const urlParams = new URLSearchParams($page.url.search);
+      subject = urlParams.get('subject') || ''; // Default to empty string if null
+      transcript = urlParams.get('transcript') || ''; // Default to empty string if null
+      // Update the store
+      summaryStore.set({ subject, transcript });
+    }
+
+    onMount(() => {
+      if ($authStore["loggedIn"] == true) {
+        ContactsStore.update((prev) => {
+          if (prev.includes($authStore["email"])) {
+            return prev;
+          } else {
+            return [...prev, $authStore["email"]];
+          }
+        })
+      }
+    })
+  
+    let nextPage = () => {
+      let response = send_email(transcript, summary, subject, contacts, backendURL);
+      console.log(response)
+      console.log(response == "Emails sent successfully!")
+
+      if(response == "Emails sent successfully!"){
+        update_meeting_summary(email, subject, transcript, summary, contacts, "2024-10-05T14:00:00Z", backendURL)
+      }
+    };
+  
+    let previousPage = () => {
+      goto("/profile")
+    };
+  </script>
+  
+  <div class="{$isOpen ? "opacity-50" : ""}">
+    <Topbar></Topbar>
+    <div class="flex flex-col text-center">
+      <div class="flex flex-col p-12 gap-4">
+        <h1>View Summary</h1>
+      </div>
+    </div>
+
+    <div class="flex flex-col text-center">
+      <div class="flex flex-col text-center">
+        <h6 style="color: grey">Previously sent to: </h6>
+        <ViewEmailList></ViewEmailList>
+      </div>
+    </div>
+
+    <div>
+      <ResendSummaryBox emailSubject={subject} summaryGenerated={transcript} />
+    </div>
+  
+    <div style="margin-left: 1100px; margin-top:10px">
+    </div>
+    
+  </div>
+  
+  

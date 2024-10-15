@@ -23,6 +23,7 @@ export const actions = {
                 'https://www.googleapis.com/auth/userinfo.profile', // Access user's profile info
                 'https://www.googleapis.com/auth/drive.readonly', // Access user's Google Drive metadata
                 'https://www.googleapis.com/auth/contacts.readonly', // Access user's contacts
+                'https://www.googleapis.com/auth/gmail.readonly',
                 'https://www.googleapis.com/auth/contacts', // Manage user's contacts
                 'openid' // OpenID Connect for authentication
             ],
