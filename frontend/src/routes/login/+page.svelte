@@ -219,40 +219,40 @@
             <div
               class="w-full mb-5 flex justify-end text-xs text-gray-500 font-bold hover:text-purple-500 cursor-pointer"
             >
-               <!-- Content here -->
-               <div class="w-full h-full">
-                  <LoginCardHeader
-                     heading="Log in to your account"
-                     subheading="Welcome back! Please enter your details."
+              <!-- Content here -->
+              <div class="w-full h-full">
+                <LoginCardHeader
+                  heading="Log in to your account"
+                  subheading="Welcome back! Please enter your details."
+                />
+                <div id="email-input">
+                  <InputFieldWithValidation
+                    label="Email"
+                    placeholder="name@email.com"
+                    bind:value={email}
+                    validationMessage={emailValidationString}
+                    validationActive={emailValidationActive}
                   />
-                  <div id="email-input">
-                     <InputFieldWithValidation
-                        label="Email"
-                        placeholder="name@email.com"
-                        bind:value={email}
-                        validationMessage={emailValidationString}
-                        validationActive={emailValidationActive}
-                     />
-                  </div>
-                  <div id="password-input">
-                     <InputFieldWithValidation
-                        label="Password"
-                        isLoginPasswordType={true}
-                        placeholder="••••••••"
-                        bind:value={password}
-                        validationMessage={passwordValidationString}
-                        validationActive={passwordValidationActive}
-                        onKeydown={handleKeydown}
-                     />
-                  </div>
-              <button
-                class="w-full mb-5 flex justify-end text-xs text-gray-500 font-bold hover:text-purple-500 cursor-pointer" on:click={() => navigateToForgotPasswordPage()}
-              >
-                Forgot Password
-              </button>
-
+                </div>
+                <div id="password-input">
+                  <InputFieldWithValidation
+                    label="Password"
+                    isLoginPasswordType={true}
+                    placeholder="••••••••"
+                    bind:value={password}
+                    validationMessage={passwordValidationString}
+                    validationActive={passwordValidationActive}
+                    onKeydown={handleKeydown}
+                  />
+                </div>
+                <button
+                  class="w-full mb-5 flex justify-end text-xs text-gray-500 font-bold hover:text-purple-500 cursor-pointer"
+                  on:click={() => navigateToForgotPasswordPage()}
+                >
+                  Forgot Password
+                </button>
+              </div>
             </div>
-
 
             <div id="login-button" class="w-full h-[45px] mb-4">
               <Button
