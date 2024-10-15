@@ -8,8 +8,9 @@
   import Button from "../components/button.svelte";
   import { getAuth, authStore, clearAuth } from "../stores/auth-store.js";
   import { goto } from "$app/navigation";
-  import { resetStores } from "../stores/reset-store.js";
+  import { resetStores, resetStoresOnHomeClick } from "../stores/reset-store.js";
   import PopUpModal from '../components/popUpModal.svelte';
+
 
   let showDropdown = false;
   let isHovered = false;
@@ -60,7 +61,13 @@
 
   // Function to handle going to main page (NOT sign in if they are signed in already)
   function handleGoHome() {
-    goto("/upload_audio");
+    resetStoresOnHomeClick();
+    if (email == "") {
+      clearAuth();
+      goto("/login");
+    } else {
+      goto("/upload_audio")
+    }
   }
 
   // Function to handle navigating to sign in page
