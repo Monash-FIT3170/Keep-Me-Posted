@@ -24,4 +24,8 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     # Test endpoint for token authentication
     path('test_token', views.test_token, name='test_token'),
+    # Endpoint for sending password reset
+    path('send_password_reset', views.send_password_reset, name="send_password_reset"),
+    # Endpoint for resetting password
+    path('reset_password', views.reset_password, name="reset_password"),
 ]

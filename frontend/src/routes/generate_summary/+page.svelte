@@ -3,7 +3,8 @@
     Page that shows the summary generated
 
     Author: Brenda Dang, Diya Ramesh
-    Last Modified: 1/08/2024
+    Modified by: Parul Garg
+    Last Modified: 13/10/2024
 -->
 
 <script>
@@ -15,6 +16,7 @@
   import ArrowLeft from "../../assets/arrow-left.png"
   import ArrowRight from "../../assets/arrow-right.png"
   import PopUpModal from "../../components/popUpModal.svelte";
+  import { onMount } from "svelte";
 
   export let title = "Your Summary is Being Generated...";
   export let subTitle = "We are still generating your summary...";
@@ -50,6 +52,26 @@
       subTitle = "We are still generating your summary...";
     }
   }
+
+  //changing the positioning of the buttons based on whether the user is scrolling or not
+  let isScrolling = false;
+  const whenScrolling = () => {
+    if (window.scrollY > 0){
+      isScrolling = true;
+    }
+    else{
+      isScrolling = false;
+    }
+  };
+
+  //handling the event listener
+  onMount(() => {
+    window.addEventListener("scroll", whenScrolling);
+    return () => {
+      window.removeEventListener("scroll", whenScrolling);
+    };
+  });
+
   
 </script>
 
@@ -73,14 +95,16 @@
   </div>
 
   {#if $summaryStore.summary}
-    <div class="relative flex justify-between p-8">
+  <div class={isScrolling ? "relative flex justify-between p-8": ""}>
+    <div class={isScrolling ? "": "absolute bottom-8 left-8"}>
       <Button
         class="primary"
         text="Re-Upload Audio"
         icon={ArrowLeft}
         handleClick={backBtn}
       />
-
+    </div>
+    <div class={isScrolling ? "": "absolute bottom-8 right-8"}>
       <Button
         class="primary"
         text="Add Recipients"
@@ -89,6 +113,7 @@
         handleClick={forwardBtn}
       />
     </div>
+  </div>
   {:else}
     <div class="absolute bottom-8 left-8">
       <Button
