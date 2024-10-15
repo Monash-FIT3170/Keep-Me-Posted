@@ -31,7 +31,9 @@ def send_email(request):
 
     # Extract only the part before the '@' symbol if it's not 'Guest'
     if user_email != 'Guest':
-        user_email = user_email.split('@')[0]
+        first_part_email = user_email.split('@')[0]  # Get the part before '@'
+    else:
+        first_part_email = 'Guest'
 
     if not contacts:
         raise ValueError("Contacts list is empty.")
@@ -43,8 +45,12 @@ def send_email(request):
             email["From"] = username
             email["To"] = contact
 
-            # Use the user's email for the signature or 'Guest' if not logged in
-            signature = f"\n\nYours sincerely,\n{user_email}"
+            # If the user is not 'Guest', show both the first part and full email in the signature
+            if user_email != 'Guest':
+                signature = f"\n\nThis summary was generated using Keep Me Posted© on behalf of:\n\n<strong>{first_part_email} | {user_email}</strong>"
+            else:
+                # If the user is 'Guest', only show 'Guest'
+                signature = f"\n\nThis summary was generated using Keep Me Posted© on behalf of:\n\n<strong>Guest</strong>"
 
             # Append the signature to the message
             message_with_signature = message + signature
