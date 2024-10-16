@@ -31,7 +31,9 @@ def send_email(request):
 
     # Extract only the part before the '@' symbol if it's not 'Guest'
     if user_email != 'Guest':
-        user_email = user_email.split('@')[0]
+        first_part_email = user_email.split('@')[0]  # Get the part before '@'
+    else:
+        first_part_email = 'Guest'
 
     if not contacts:
         raise ValueError("Contacts list is empty.")
@@ -43,8 +45,12 @@ def send_email(request):
             email["From"] = username
             email["To"] = contact
 
-            # Use the user's email for the signature or 'Guest' if not logged in
-            signature = f"\n\nYours sincerely,\n{user_email}"
+            # If the user is not 'Guest', show both the first part and full email in the signature
+            if user_email != 'Guest':
+                signature = f"\n\nThis summary was generated using Keep Me Posted© on behalf of:\n\n<strong>{first_part_email} | {user_email}</strong>"
+            else:
+                # If the user is 'Guest', only show 'Guest'
+                signature = f"\n\nThis summary was generated using Keep Me Posted© on behalf of:\n\n<strong>Guest</strong>"
 
             # Append the signature to the message
             message_with_signature = message + signature
@@ -69,24 +75,25 @@ def send_email(request):
                 attachment.add_header('Content-Disposition', 'attachment', filename='Meeting_Transcript.pdf')
                 email.attach(attachment)
 
-    try:
-        # Create secure connection with server and send email
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-            server.login(username, password)
-            server.sendmail(username, contact, email.as_string())
-        
-        return JsonResponse({'details': "Emails sent successfully!"}, status=200)
-
-    except smtplib.SMTPHeloError as e:
-        return JsonResponse({'error': f"HELO error occurred: {str(e)}"}, status=500)
-    except smtplib.SMTPAuthenticationError as e:
-        return JsonResponse({'error': 'Authentication failed.'}, status=535)
-    except smtplib.SMTPNotSupportedError:
-        return JsonResponse({'error': 'SMTP command not supported.'}, status=502)
-    except smtplib.SMTPException as e:
-        return JsonResponse({'error': "No suitable authentication method found."}, status=401)
+            try:
+                # Create secure connection with server and send email
+                context = ssl.create_default_context()
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+                    server.login(username, password)
+                    server.sendmail(
+                        username, contact, email.as_string()
+                    )
+                
+            except smtplib.SMTPHeloError as e:
+                return JsonResponse({'error': f"HELO error occurred: {str(e)}"}, status=500)
+            except smtplib.SMTPAuthenticationError as e:
+                return JsonResponse({'error': 'Authentication failed.'}, status=500)
+            except smtplib.SMTPNotSupportedError:
+                return JsonResponse({'error': 'SMTP command not supported.'}, status=500)
+            except smtplib.SMTPException as e:
+                return JsonResponse({'error': "No suitable authentication method found."}, status=500)
     
+    return JsonResponse({'details': "Emails sent successfully!"}, status=200)
 
 def create_pdf(path, transcript):
 
