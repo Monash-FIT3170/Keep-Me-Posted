@@ -36,11 +36,6 @@
     loggedIn = value.loggedIn;
   });
 
-  // Clean up the subscription when the component is destroyed
-  onDestroy(() => {
-    unsubscribe();
-  });
-
   onMount(async () => {
     const queryParams = new URLSearchParams(window.location.search);
     googleAuth = queryParams.get("google_auth") === "true";
