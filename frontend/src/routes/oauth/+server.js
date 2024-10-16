@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
-import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from "$env/static/private";
+import { VITE_SECRET_CLIENT_ID, VITE_SECRET_CLIENT_SECRET } from "$env/static/private";
 import { frontendURL } from "../../api-functions/base-URL";
 
 // Function to fetch user data from Google
@@ -67,8 +67,8 @@ export const GET = async ({ url, cookies }) => {
 
   try {
     const oAuth2Client = new OAuth2Client(
-      SECRET_CLIENT_ID,
-      SECRET_CLIENT_SECRET,
+      VITE_SECRET_CLIENT_ID,
+      VITE_SECRET_CLIENT_SECRET,
       redirectURL
     );
 

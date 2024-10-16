@@ -1,17 +1,17 @@
 import { redirect } from '@sveltejs/kit';
 import { OAuth2Client } from 'google-auth-library';
-import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
+import { VITE_SECRET_CLIENT_ID, VITE_SECRET_CLIENT_SECRET } from '$env/static/private';
 import { frontendURL } from '../../api-functions/base-URL';
 
 export const actions = {
     OAuth2: async({}) => {
-        const redirectURL = `${frontendURL}oauth`; // Use the dynamic frontend URL
+        const redirectURL = `${frontendURL}oauth`; // Use the dynamiVITE_c frontend URL
 
         console.log('id', SECRET_CLIENT_ID);
 
         const oAuth2Client = new OAuth2Client(
-            SECRET_CLIENT_ID,
-            SECRET_CLIENT_SECRET,
+            VITE_SECRET_CLIENT_ID,
+            VITE_SECRET_CLIENT_SECRET,
             redirectURL
         );
 
