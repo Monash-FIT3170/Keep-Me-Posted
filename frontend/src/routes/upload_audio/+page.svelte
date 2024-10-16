@@ -36,11 +36,6 @@
     loggedIn = value.loggedIn;
   });
 
-  // Clean up the subscription when the component is destroyed
-  onDestroy(() => {
-    unsubscribe();
-  });
-
   onMount(async () => {
     const queryParams = new URLSearchParams(window.location.search);
     googleAuth = queryParams.get("google_auth") === "true";
@@ -95,12 +90,6 @@
     const unsubscribeMeetings = meetings.subscribe(meetingsList => {
         console.log('Current Meetings:', meetingsList);
     });
-
-    // Cleanup subscription for meetings when the component is destroyed
-    onDestroy(() => {
-        unsubscribeMeetings();
-    });
-
   });
 
   // Function to navigate to the summary page and update the status to "Viewed"

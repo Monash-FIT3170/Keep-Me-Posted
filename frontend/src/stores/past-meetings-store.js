@@ -45,7 +45,7 @@ meetings.subscribe((value) => {
 export const fetchMeetings = async () => {
     const userEmail = getUserEmailFromAuthStore();
     if (!userEmail) {
-        console.error('No user email found in session storage.');
+        console.log('No user email found in session storage.');
         return;
     }
 
