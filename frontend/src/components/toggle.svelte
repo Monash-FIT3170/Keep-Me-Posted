@@ -47,7 +47,7 @@
           on:keydown={handleKeyPress}
       ></div>
 
-      <span class="p-[5px] text-base text-black after:content-['*'] after:text-red-500">
+      <span class="p-[5px] text-base text-black">
           Attach meeting transcript with email?
       </span>
   </label>
