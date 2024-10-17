@@ -1,7 +1,8 @@
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 
 export const transcriptStore = writable({
-    transcript: ""
-})
+    transcript: "",
+    transcriptWithSpeakers: ""
+});
 
-export const sendWithTranscriptStore = writable(true)
+export const sendWithTranscriptStore = writable(true);

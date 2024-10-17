@@ -24,11 +24,15 @@ def transcribe(request):
 
         # Call the transcribe function with the file URL
         transcription = TS.transcribe(saved_file_url)
+        transcription_with_speakers = TS.transcribe_with_speakers(saved_file_url)
 
         # Delete the file after transcription (optional)
         fs.delete(saved_file)
 
-        return Response({'transcription': transcription}, status=status.HTTP_200_OK)
+        return Response({
+            'transcription': transcription,
+            'transcription_with_speakers': transcription_with_speakers
+        }, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
