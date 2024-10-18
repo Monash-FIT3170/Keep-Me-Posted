@@ -4,6 +4,7 @@ import { emailStatusStore } from "../stores/email-status-store"
 import { getAuth } from "../stores/auth-store"  // Import getAuth to retrieve user's email
 
 export let send_email = async (transcript, message, subject, contacts, baseURL) => {
+export let send_email = async (transcript, message, subject, contacts, baseURL) => {
     const postRequestString = baseURL + "/api/sendemail" 
 
     let data = new FormData()
@@ -35,6 +36,10 @@ export let send_email = async (transcript, message, subject, contacts, baseURL) 
         };
 
         const jsonResponse = await response.json()
+
+        console.log("email sent")
+        emailStatusStore.set("Sent")
+
 
         console.log("email sent")
         emailStatusStore.set("Sent")

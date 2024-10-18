@@ -67,6 +67,10 @@ def send_email(request):
             # The email client will try to render the last part first
             email.attach(part1)
             email.attach(part2)
+            # Add HTML/plain-text parts to MIMEMultipart message
+            # The email client will try to render the last part first
+            email.attach(part1)
+            email.attach(part2)
 
             if transcript:  # Only attach PDF if transcript exists
                 path = "emailing/static/Transcript_Template.pdf"

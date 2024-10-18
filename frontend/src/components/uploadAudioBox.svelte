@@ -1,6 +1,7 @@
 <!--
 
 	Upload Audio Box Component
+	Upload Audio Box Component
 
 	consists of parts
 	1. the box itself = blue on initial, green on complete
@@ -56,7 +57,11 @@
 
 	async function handleFilesSelect(e) {
 		const { acceptedFiles } = e.detail;
+	async function handleFilesSelect(e) {
+		const { acceptedFiles } = e.detail;
 
+		if (acceptedFiles.length > 0) {
+			const selectedFile = acceptedFiles[0];
 		if (acceptedFiles.length > 0) {
 			const selectedFile = acceptedFiles[0];
 

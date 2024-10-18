@@ -13,6 +13,8 @@
     export let icon = ''; // Default empty string for icon URL
     export let iconSvg = ''; // Default empty string for inline SVG
     export let iconPos = 'left'; // Default icon position is on left of the button
+    export let iconSvg = ''; // Default empty string for inline SVG
+    export let iconPos = 'left'; // Default icon position is on left of the button
     export let text = 'Button';
     export let altText = '';
     export let fullWidth = false; // Default to false for not full width

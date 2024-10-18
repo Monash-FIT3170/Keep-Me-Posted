@@ -5,6 +5,13 @@
     Author: Rohit
     Last Modified: 5/08/2024
 -->
+<!-- Login page
+
+    Landing Page for application that allows users to login to application
+
+    Author: Rohit
+    Last Modified: 5/08/2024
+-->
 <script>
   import { goto } from "$app/navigation";
   import { updateAuth, clearAuth } from "../../stores/auth-store.js";
@@ -56,10 +63,10 @@
     }
   }
 
-  function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
+   function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+   }
 
   function emailValidation(email) {
     if (email == "") {
@@ -102,9 +109,9 @@
     }
   }
 
-  async function handleSignIn() {
-    console.log("Email:", email);
-    console.log("Password:", password);
+   async function handleSignIn() {
+      console.log("Email:", email);
+      console.log("Password:", password);
 
     if (emailValidation(email) & passwordValidation(password)) {
       const data = { email: email, password: password };
@@ -118,31 +125,31 @@
       const url = backendURL + "/login";
       const data = loginData;
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+         const response = await fetch(url, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+         });
 
-      const responseData = await response.json();
-      console.log("Response:", responseData);
+         const responseData = await response.json();
+         console.log("Response:", responseData);
 
       if (response.ok) {
         updateAuth(loginData.email, true);
         navigateToNextPage();
       }
 
-      return responseData;
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
+         return responseData;
+      } catch (error) {
+         console.error("Error:", error);
+      }
+   }
 
-  function handleSignUpClick() {
-    goto("/signup");
-  }
+   function handleSignUpClick() {
+      goto("/signup");
+   }
 
   function navigateToNextPage() {
     goto("/upload_audio");

@@ -29,6 +29,13 @@ export let send_summary = async (transcript, baseURL) => {
 
         return jsonResponse.summary, jsonResponse.title; 
 
+        summaryStore.set({
+            summary: jsonResponse.summary,
+            subject: jsonResponse.title
+        })
+
+        return jsonResponse.summary, jsonResponse.title; 
+
     } catch (error) {
         console.error("Error:", error);
             
