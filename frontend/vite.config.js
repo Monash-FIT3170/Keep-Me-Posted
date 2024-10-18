@@ -24,7 +24,15 @@ export default defineConfig(({ mode }) => {
         server: {
             fs: {
                 allow: ['/src/']
-            }
+            },
+            headers: {
+                "Cross-Origin-Opener-Policy": "same-origin",
+                "Cross-Origin-Embedder-Policy": "require-corp",
+            },
         },
-    };
+        optimizeDeps: {
+            exclude: ["@ffmpeg/ffmpeg", "@ffmpeg/util"],
+          }
+
+        }
 });
