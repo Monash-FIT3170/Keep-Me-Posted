@@ -18,24 +18,41 @@
 
 Follow these steps to set up and run the Keep Me Posted application locally.
 
+If you are setting up KMP for the first time, please follow the instructions under **Installing and Running the Application**. Otherwise, follow the instructions under **Running the Application Only**.
+
 ## Prerequisite
 
 Before running the application locally, ensure you have installed node and npm globally - [guide]( https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) 
 
 
-## Running the Full Application
-Ensure you are in the root directory
+## Installing and Running the Application
+Ensure you are in the root directory.
 
 ### On Windows 
-To run the application on Windows, execute the run_servers.bat file. You can do this by double-clicking the file in your file explorer or by running the following command in your terminal:
+To install all requirements and run the application on Windows, execute the run_install.bat file. You can do this by double-clicking the file in your file explorer or by running the following command in your terminal:
 ```console
-./run_servers.bat
+./run_install.bat
 ```
 
 ### On macOS
-To run the servers on macOS, execute the run_servers.sh script. Use the following command in your terminal:
+To install and run the servers on macOS, execute the run_install.sh script. Use the following command in your terminal:
 ```console
-bash run_servers.sh
+bash run_install.sh
+```
+
+## Running the Application Only
+Ensure you are in the root directory.
+
+### On Windows 
+To run the application on Windows, execute the run.bat file. You can do this by double-clicking the file in your file explorer or by running the following command in your terminal:
+```console
+./run.bat
+```
+
+### On macOS
+To run the servers on macOS, execute the run.sh script. Use the following command in your terminal:
+```console
+bash run.sh
 ```
 
 # Hardware and Software Required
@@ -88,6 +105,29 @@ Django is used for the backend. Django is a high-level Python web framework that
     SMTP_API_KEY = "insert pass key here"
     ```
 
+## Google Cloud Platform
+1. Create a Google Cloud Platform account.
+2. Create a new project.
+3. Under **APIs and Services**, go to **OAuth** consent screen.
+4. Set type to external, fill in required fields, and continue.
+5. Skip over scopes.
+6. In the **Test Users** page, add the emails of the people who will need to have access to the Google services using your app for development (the services will be blocked to emails not added here unless you submit your app to google for review). Additional emails can be added later on (up to 100 test users).
+7. In APIs, under credentials, click **Create Credential -> OAuth client ID**.
+8. Select web application and add **“Authorized redirect URIs”**. These are the URLs that can send OAuth requests using your client ID and password. 
+9. Once you create the ID you’ll be able to see **client ID and client secret**.
+10. Create an API key (used in the google drive button component).
+11. Go to enabled APIs and services and enable the following:
+    - Google Drive API
+    - Gmail API
+    - People API
+12. Add the keys to **.env.local**.
+
+# Folder Structure of the Repository
+A detailed explanation of the structure of the backend folder (Keep-Me-Posted/backend) can be found [here](https://docs.google.com/document/d/1YI8r4dVbv2plGCXqexPKSkVPoaYwnvzpAtN_q0XUfro/edit#heading=h.9ezp793n1bwb).
+
+A detailed explanation of the structure of the frontend folder (Keep-Me-Posted/frontend) can be found [here](https://docs.google.com/document/d/17psSA8k25k4564wV-8v7a0rGIPiNH81VshTD11CCbUA/edit#heading=h.9ezp793n1bwb).
+
+
 # Login Credentials
 See [this link](https://docs.google.com/document/d/12utGqgSPGZd5jvaNlT22FTJlpHR073LqWaKULZvcidU/edit) for accounts for:
 * AssemblyAI project
@@ -107,5 +147,19 @@ As of August 2024, AssemblyAI’s Speech-to-Text API imposes a usage and concurr
 ## Common Bugs and Responses
 | **Description**                              | **Counter Measures**                              |
 |----------------------------------------------|---------------------------------------------------|
-|Some cache files were accidentally pushed to the Git at the beginning of the project and hence, may come up under “Unstaged Changes" under Source Control when you run the code locally. Examples of these cache files include non-ambient.d.ts and db.sqlite3. | The .gitignore file can be updated to ensure these cache files do not get pushed. Adequate training and reminders to team members can also prevent this from occurring. In the case that these cache files are accidentally pushed to the Git again: Ensure that team members remember to discard these files from the listed “Changes” in Source Control before committing and pushing. Alternatively, you can try to revert the commit by following [this](https://www.youtube.com/watch?v=H2DuJNWbqLw&t=70s) tutorial.|
+|Cache files found in .gitignore may be accidentally pushed to the repository. These will come up under “Unstaged Changes” under Source Control when you run the code locally. Examples of these cache files include non-ambient.d.ts and db.sqlite3. | In the case where the cache files are pushed to the Git repository by accident: Ensure all teammates run the following commands in the terminal - ```git clean -fxdn``` (to preview the files to be deleted) and then ```git clean -fxd``` (to confirm deletion). Alternatively, you can try to revert the commit by following [this](https://www.youtube.com/watch?v=H2DuJNWbqLw&t=70s) tutorial.|
 
+# Guidance on Testing Pipeline
+## Continuous Integration
+Continuous integration of the frontend is implemented using Cypress. The relevant test cases can be found in the directory **frontend/cypress**. 
+
+Cypress tests are recorded using cypress cloud (optional). The key is stored in the GitHub repository secret variables.
+
+Continuous integration of the backend is implemented using Django’s built-in testing. The test cases can be found in the **backend/app_name/tests.py** file within the folder of each app in the backend.
+
+GitHub Actions is used to run the test suite upon each pull request to either main or develop. GitHub Actions configurations can be found in the **.github/workflows** directory.
+
+## Continuous Deployment
+Continuous deployment of the frontend is supported by Netlify - every merge to the production branch in the Git repository is automatically deployed. Netlify also supports deployment of preview branches on every pull request which can be used for testing functionality before merging. Production branch can be changed in Netlify under **Site Configuration -> Continuous Deployment**.
+
+Currently, there is no continuous deployment for the backend. The backend must be manually re-deployed on Render.
