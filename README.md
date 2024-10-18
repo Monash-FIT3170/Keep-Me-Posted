@@ -52,21 +52,6 @@ To run the application on Windows, execute the run.bat file. You can do this by 
 ### On macOS
 To run the servers on macOS, execute the run.sh script. Use the following command in your terminal:
 ```console
-run.sh
-```
-
-## Running the Application Only
-Ensure you are in the root directory.
-
-### On Windows 
-To run the application on Windows, execute the run.bat file. You can do this by double-clicking the file in your file explorer or by running the following command in your terminal:
-```console
-./run.bat
-```
-
-### On macOS
-To run the servers on macOS, execute the run.sh script. Use the following command in your terminal:
-```console
 bash run.sh
 ```
 
