@@ -27,8 +27,9 @@ export let transcribe_audio = async (audioFile, baseURL) => {
 
         const jsonResponse = await response.json();
         transcriptStore.set({
-            transcript: jsonResponse.transcription
-        })
+            transcript: jsonResponse.transcription,
+            transcriptWithSpeakers: jsonResponse.transcription_with_speakers
+        });
 
         return jsonResponse.transcription; 
 
