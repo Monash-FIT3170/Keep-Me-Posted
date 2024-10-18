@@ -163,3 +163,21 @@ GitHub Actions is used to run the test suite upon each pull request to either ma
 Continuous deployment of the frontend is supported by Netlify - every merge to the production branch in the Git repository is automatically deployed. Netlify also supports deployment of preview branches on every pull request which can be used for testing functionality before merging. Production branch can be changed in Netlify under **Site Configuration -> Continuous Deployment**.
 
 Currently, there is no continuous deployment for the backend. The backend must be manually re-deployed on Render.
+
+# Versioning Strategy
+To deploy a new version of the project to the main branch:
+
+1. Create a pull request (see Pull Request Strategy below) with the base branch as main and the compare branch as develop.
+2. Label the commit with the version of the project. For example, “v1.0”.
+3. Merge.
+
+# Pull Request Strategy
+To contribute to the project, you must have permission to contribute by adding yourself as a collaborator under Settings in the Git repository.
+
+1. Go to Pull requests.
+2. Click New pull request.
+3. Select the base (the branch you want to merge into) and compare branch (the branch being merged into the base branch).
+4. Click Create pull request.
+
+For more details on the Git strategy, see [here](https://docs.google.com/document/d/1d1pMSAQLIfLQFrjnrbXDvQhXSAV9mGrOvcTVU_ldZN4/edit?usp=sharing).
+
