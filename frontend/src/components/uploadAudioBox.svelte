@@ -7,10 +7,12 @@
 	2. dropzone = container that can be clicked on/drag drop file
 	3. description = a text box with either instruction or completion, 
 		includes an icon, a header (bolded line), second and third line
-
+	4. loading bar = a loading bar that appears when file is uploaded and is being processed
+	5. error popup = a popup that appears when an error occurs, includes a header, main text, and a button
+	6. mp4 tp mp3 converter = converts mp4 files to mp3 files to reduce bottleneck in assemblyAI
 	Authors: Parul Garg (pgar0011)
 	Editied by: Benjamin Cherian, Zihao Wang, Angelina Leung, Maureen Pham, Danny Leung
-	Last Modified: 1/10/24 by Alex Ung
+	Last Modified: 6/10/24
 
 -->
 <!-- JavaScript -->
@@ -28,8 +30,15 @@
     import { resetStores } from "../stores/reset-store";
 	import { goto } from "$app/navigation";
 	import { errorStore } from "../stores/error-store";
-	
   	import { onMount } from "svelte";
+	import { FFmpeg } from '@ffmpeg/ffmpeg';
+
+
+
+	// // FFmpeg setup
+	// ffmpeg is type FFmpeg
+	let ffmpeg;
+	let ffmpegIsLoaded = false;
 
 	// content
 	let popUpModalComponent; // Pointer for the PopUpModal component
@@ -40,6 +49,8 @@
 	const errorMessage = {
 		DURATION_EXCEEDED: ["Meeting duration exceeded", "Your meeting audio should be less than 120 minutes.", "Re-upload"],
 		INVALID_FORMAT: ["Invalid audio format!", "Your meeting audio must be in MP3 or WAV format.", "Re-upload"],
+		ASSEMBLYAI_ERROR: ["AssemblyAI Error name", "Some description of the error. Please try again later", "Close"],	
+		FFMPEG_ERROR: ["File Processing Error", "There was an error converting your MP4 file to MP3. Please try again later", "Retry"],
 	};
 	
 	let popupHeader = ''; // Header for the popup
@@ -47,6 +58,7 @@
 	let popupButtonText = '';
 
 	onMount(() => {
+		loadFFmpeg();
 		window.addEventListener("fileSelected", handleFilesSelect);
 
 		return () => {
@@ -55,33 +67,119 @@
 	})
 
 	async function handleFilesSelect(e) {
-		const { acceptedFiles } = e.detail;
+    const { acceptedFiles } = e.detail;
 
-		if (acceptedFiles.length > 0) {
-			const selectedFile = acceptedFiles[0];
+    if (acceptedFiles.length > 0) {
+        let selectedFile = acceptedFiles[0];
 
-			// Initial file type check before loading it as an audio source
-			if (
-				!selectedFile.name.endsWith(".mp3") &&
-				!selectedFile.name.endsWith(".wav") &&
-				!selectedFile.name.endsWith(".mp4")
-			) {
-				raiseError(errorMessage.INVALID_FORMAT);
-				return; // Exit the function early if file type is incorrect
-			}
+        // File type check
+        if (!selectedFile.name.endsWith(".mp3") && !selectedFile.name.endsWith(".wav") && !selectedFile.name.endsWith(".mp4")) {
+            raiseError(errorMessage.INVALID_FORMAT);
+            return;
+        }
+
+        // Load FFmpeg if needed
+        try {
+            if (!ffmpegIsLoaded) {
+                console.log('Loading FFmpeg');
+                await loadFFmpeg();
+                console.log('FFmpeg loading complete');
+            }
+        } catch (error) {
+            console.error("Failed to load FFmpeg:", error);
+            raiseError(errorMessage.FFMPEG_ERROR);
+            return;
+        }
+
+        // Convert MP4 to MP3 if necessary
+        if (selectedFile.name.endsWith(".mp4")) {
+            try {
+                selectedFile = await convertMp4ToMp3(selectedFile);
+            } catch (error) {
+                console.error("Failed to convert MP4 to MP3:", error);
+                raiseError(errorMessage.FFMPEG_ERROR);
+                return;
+            }
+        }
+
+        // Check audio duration
+        const audio = new Audio(URL.createObjectURL(selectedFile));
+        audio.addEventListener("loadedmetadata", async () => {
+            if (audio.duration >= MAX_DURATION_SECONDS) {
+                raiseError(errorMessage.DURATION_EXCEEDED);
+                return;
+            }
+            // File has passed all checks
+            startUpload(selectedFile);
+        });
+    }
+}
+	async function loadFFmpeg() {
+		if (ffmpegIsLoaded) {
+			console.log("FFmpeg already loaded.");
+			return;
+		}
+
+		try {
+			console.log("Starting FFmpeg load...");
+			const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
 			
-			// check duration of audio file
-			const audio = new Audio(URL.createObjectURL(selectedFile)); // Create new Audio HTML object, create URL used as source for audio element
-
-			audio.addEventListener("loadedmetadata", async () => {
-				if (audio.duration >= MAX_DURATION_SECONDS) {
-					raiseError(errorMessage.DURATION_EXCEEDED);
-					return; // Exit the function early if file duration is too long
-				}
-				// File has passed all checks
-				startUpload(selectedFile);
+			console.log("Creating new FFmpeg instance...");
+			ffmpeg = new FFmpeg();
+			
+			console.log("FFmpeg instance created. Attempting to load core...");
+			await ffmpeg.load({
+				coreURL: `${baseURL}/ffmpeg-core.js`,
+				wasmURL: `${baseURL}/ffmpeg-core.wasm`,
 			});
-  		}
+			
+			console.log("FFmpeg core loaded successfully.");
+			ffmpegIsLoaded = true;
+		} catch (error) {
+			console.error("Error loading FFmpeg:", error);
+			ffmpegIsLoaded = false;
+			throw error; // Rethrow the error so it can be caught by the caller
+		}
+	}
+
+	// file is type Uint8Array
+	async function readFile(file) {
+    return new Promise((resolve => {
+		const fileReader = new FileReader()
+		fileReader.onload = () => {
+			const {result} = fileReader;
+			if (result instanceof ArrayBuffer) {
+				resolve(new Uint8Array(result))
+			} 
+		}
+		fileReader.onerror = () => {
+			error = 'Could not read file'
+		}
+		fileReader.readAsArrayBuffer(file)
+	}))
+}
+
+
+	async function convertMp4ToMp3(file) {
+		try {
+			const videoData = await readFile(file);
+			console.log('File read successfully');
+
+			await ffmpeg.writeFile('input.mp4', videoData);
+			console.log('MP4 file written');
+
+			await ffmpeg.exec(['-i', 'input.mp4', 'output.mp3']);
+			console.log('MP4 file converted to MP3');
+			
+			const mp3Data = await ffmpeg.readFile('output.mp3');
+			console.log('MP3 data retrieved');
+
+			const mp3Blob = new Blob([mp3Data.buffer], { type: 'audio/mpeg' });
+			console.log('MP4 file converted to MP3');
+			return mp3Blob;
+		} catch (error) {
+			console.error("Error in convertMp4ToMp3:", error);
+		}
 	}
 
 	// Function to handle event where incorrect file formats are uploaded
