@@ -7,6 +7,7 @@ export default defineConfig({
       // implement node event listeners here
     },
     baseUrl: 'http://localhost:5173',
+    supportFile: false, // else need a separate file
   },
   retries: {
     runMode: 3,

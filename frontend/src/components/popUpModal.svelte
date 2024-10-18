@@ -12,6 +12,7 @@
   import Button from "./button.svelte";
   import errorIcon from "../assets/error-icon.png";
   import { Progressbar } from "flowbite-svelte";
+  import { apiStatusStore } from "../stores/api-status-store";
 
   export let type = "primary"; // Default type is primary (blue with 1 button)
   export let firstHandleClick = () => {}; // Click function for primary button (dark blue, or red)
@@ -23,6 +24,14 @@
   export let iconPath = ""; // path for image icon
   export let width = "64"; // default width of pop up
   export let visible = false; // Default state of popup is not visible
+
+  const widthClasses = {
+  '96': 'w-96',     // 24rem
+  '80': 'w-80',     // 20rem
+  '64': 'w-64',     // 16rem
+  '48': 'w-48',     // 12rem
+  'full': 'w-full', // 100%
+  };
 
   export function togglePopUp() {
     visible = !visible;
@@ -37,6 +46,11 @@
   export function animateProgress() {
     const speed = 1; // Speed of animation
     if (progress < targetProgress) {
+      if ($apiStatusStore == 'Cancel') {
+        console.log("Progress reset");
+        resetProgress();
+        return;
+      };
       progress += speed;
       if (progress >= targetProgress) {
         progress = targetProgress;
@@ -56,12 +70,12 @@
 <body>
   {#if visible}
     <div
-      class="justify-center items-center font-sans h-fulltransition ease-in-out duration-300"
+      class="justify-center items-center font-sans h-fulltransition ease-in-out duration-300 z-50"
     >
       <div
-        class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+        class="fixed inset-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 backdrop-filter backdrop-blur-md"
       >
-        <div class="bg-white rounded-lg p-4 w-{width}">
+        <div class={`bg-white rounded-lg p-4 ${widthClasses[width]}`}>
           {#if iconPath}
             <div class="flex items-center justify-center pb-2">
               <img class="h-12" src={iconPath} alt="pop up icon" />
@@ -88,7 +102,7 @@
               </div>
               <Button
                 type="primary"
-                text="Close"
+                text={firstButtonText}
                 fullWidth={true}
                 handleClick={firstHandleClick}
               />
@@ -136,29 +150,25 @@
     import TopBar from "../../components/topbar.svelte"
     import PopUpModal from "../../components/popUpModal.svelte";
 
-    let ifError = false
+    let popUpModalComponent;
 
-    function dismissError() {
-        ifError = false;
+    function togglePop() {
+        popUpModalComponent.togglePopUp();
     }
 
 </script>
 
-
-<body>
+<div>
     <TopBar />
-    <button on:click={() => ifError = !ifError}>click to cause error</button>
-    
-    {#if ifError}
-        <PopUpModal 
-        header="Invalid audio format!"
-        mainText="Your meeting audio must be in MP3 or WAV format."
-        type='error'
-        iconPath='../src/assets/error-icon.svg'
-        firstButtonText="Re-upload"
-        firstHandleClick={dismissError}
-        width='96'/>
-    {/if}
+    <button on:click={togglePop}>click to cause error</button>
 
-</body>
+</div>
+
+<PopUpModal
+  bind:this={popUpModalComponent}
+  header="Regenerating..."
+  mainText=""
+  type="loading"
+  firstHandleClick={togglePop}
+/>
 -->

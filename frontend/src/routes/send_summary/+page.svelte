@@ -23,6 +23,15 @@
   import { send_email } from "../../api-functions/send_email";
   import { backendURL } from "../../api-functions/base-URL";
   import { onDestroy, onMount } from "svelte";
+  import { update_meeting_summary } from "../../api-functions/update_meeting_summaries"
+  import { authStore } from "../../stores/auth-store";
+
+  let email = ""; // Initialize email as an empty string
+
+  // Subscribe to the authStore to get updates
+  const unsubscribe = authStore.subscribe(auth => {
+    email = auth.email; // Update email whenever the store changes
+  });
 
   let sending = true;
   onMount(() => {
@@ -38,9 +47,16 @@
         
         let subject = $summaryStore.subject;
         let contacts = $ContactsStore
-        let transcript = $sendWithTranscriptStore ? $transcriptStore.transcript : null;
+        let transcript = $sendWithTranscriptStore ? $transcriptStore.transcriptWithSpeakers : null;
 
-        await send_email(transcript, summary, subject, contacts, backendURL);
+        let response = await send_email(transcript, summary, subject, contacts, backendURL);
+        console.log(response)
+        console.log(response == "Emails sent successfully!")
+
+        if(response == "Emails sent successfully!"){
+          update_meeting_summary(email, subject, transcript, summary, contacts, "2024-10-05T14:00:00Z", backendURL)
+        }
+
         sending = false;
       } else {
         setTimeout(() => {

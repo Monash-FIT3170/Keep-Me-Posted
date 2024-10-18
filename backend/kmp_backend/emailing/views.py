@@ -27,6 +27,13 @@ def send_email(request):
     subject = request.POST.get('subject')  
     contacts = request.POST.get('contacts')
     transcript = request.POST.get('transcript')
+    user_email = request.POST.get('userEmail', 'Guest')  # Get the user's email or default to 'Guest'
+
+    # Extract only the part before the '@' symbol if it's not 'Guest'
+    if user_email != 'Guest':
+        first_part_email = user_email.split('@')[0]  # Get the part before '@'
+    else:
+        first_part_email = 'Guest'
 
     if not contacts:
         raise ValueError("Contacts list is empty.")
@@ -38,15 +45,28 @@ def send_email(request):
             email["From"] = username
             email["To"] = contact
 
+            # If the user is not 'Guest', show both the first part and full email in the signature
+            if user_email != 'Guest':
+                signature = f"\n\nThis summary was generated using Keep Me Posted© on behalf of:\n\n<strong>{first_part_email} | {user_email}</strong>"
+            else:
+                # If the user is 'Guest', only show 'Guest'
+                signature = f"\n\nThis summary was generated using Keep Me Posted© on behalf of:\n\n<strong>Guest</strong>"
 
-            # Convert message into plain MIMEText object
-            part1 = MIMEText(message, "plain")
+            # Append the signature to the message
+            message_with_signature = message + signature
 
-            # Convert message into HTML MIMEText object
-            message_html = markdown2.markdown(message)
+            # Convert message into plain MIMEText object with signature
+            part1 = MIMEText(message_with_signature, "plain")
+
+            # Convert message into HTML MIMEText object with signature
+            message_html = markdown2.markdown(message_with_signature)
             part2 = MIMEText(message_html, "html")
         
 
+            # Add HTML/plain-text parts to MIMEMultipart message
+            # The email client will try to render the last part first
+            email.attach(part1)
+            email.attach(part2)
             # Add HTML/plain-text parts to MIMEMultipart message
             # The email client will try to render the last part first
             email.attach(part1)
@@ -59,26 +79,25 @@ def send_email(request):
                 attachment.add_header('Content-Disposition', 'attachment', filename='Meeting_Transcript.pdf')
                 email.attach(attachment)
 
-    try:
-            # Create secure connection with server and send email
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-                server.login(username, password)
-                server.sendmail(
-                    username, contact, email.as_string()
-                )
-            
-            return JsonResponse({'details': "Emails sent successfully!"}, status=200)
-
-    except smtplib.SMTPHeloError as e:
-        return JsonResponse({'error': f"HELO error occurred: {str(e)}"}, status=500)
-    except smtplib.SMTPAuthenticationError as e:
-        return JsonResponse({'error': 'Authentication failed.'}, status=535)
-    except smtplib.SMTPNotSupportedError:
-        return JsonResponse({'error': 'SMTP command not supported.'}, status=502)
-    except smtplib.SMTPException as e:
-        return JsonResponse({'error': "No suitable authentication method found."}, status=401)
+            try:
+                # Create secure connection with server and send email
+                context = ssl.create_default_context()
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+                    server.login(username, password)
+                    server.sendmail(
+                        username, contact, email.as_string()
+                    )
+                
+            except smtplib.SMTPHeloError as e:
+                return JsonResponse({'error': f"HELO error occurred: {str(e)}"}, status=500)
+            except smtplib.SMTPAuthenticationError as e:
+                return JsonResponse({'error': 'Authentication failed.'}, status=500)
+            except smtplib.SMTPNotSupportedError:
+                return JsonResponse({'error': 'SMTP command not supported.'}, status=500)
+            except smtplib.SMTPException as e:
+                return JsonResponse({'error': "No suitable authentication method found."}, status=500)
     
+    return JsonResponse({'details': "Emails sent successfully!"}, status=200)
 
 def create_pdf(path, transcript):
 
